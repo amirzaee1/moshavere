@@ -4,7 +4,7 @@ const transcript=['تا حالا چیزی خریدی که همه می‌گفتن
 const $=id=>document.getElementById(id),film=$('film');
 let step=-1,ready=false,priority='',approach='',frame=0;
 let formOpen=false,saving=false,saved=false,requestId='';
-const speeds=[1.35,1.5,1],speedLabels=['۱٫۳۵×','۱٫۵×','۱×'];let speedIndex=0;
+const speeds=[1.05,1.35,1.5,1],speedLabels=['۱٫۰۵×','۱٫۳۵×','۱٫۵×','۱×'];let speedIndex=0;
 film.playbackRate=speeds[speedIndex];
 if('preservesPitch' in film)film.preservesPitch=true;
 function show(id,on=true){$(id).classList.toggle('hidden',!on)}
