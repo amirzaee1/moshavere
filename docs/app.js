@@ -3,7 +3,8 @@ const choices={2:[['result','نتیجهٔ موردنظر'],['quality','کیفی�
 const transcript=['تا حالا چیزی خریدی که همه می‌گفتن عالیه… ولی برای تو هیچ فرقی نکرد؟','چیزی که برای یکی فوق‌العاده‌ست، ممکنه چیزی نباشه که تو لازم داری.','وقتی می‌خوای یه محصول جدید بخری، کدوم برات مهم‌تره؟','برای این‌که بفهمی یه محصول به دردت می‌خوره، ترجیح می‌دی چطور بررسی کنی؟','اول نیازت، بعد بررسی محصول، آخرش هم تصمیم با خودت.','اگه هنوز مطمئن نیستی، روی «نیاز به مشاوره دارم» بزن.'];
 const $=id=>document.getElementById(id),film=$('film');
 let step=-1,ready=false,priority='',approach='',frame=0;
-let formOpen=false,saving=false,saved=false,requestId='';
+let formOpen=false,formPromptPlaying=false,saving=false,saved=false,requestId='';
+const FORM_PROMPT_END=65.62;
 const speeds=[1.05,1.35,1.5,1],speedLabels=['۱٫۰۵×','۱٫۳۵×','۱٫۵×','۱×'];let speedIndex=0;
 film.playbackRate=speeds[speedIndex];
 if('preservesPitch' in film)film.preservesPitch=true;
@@ -11,16 +12,16 @@ function show(id,on=true){$(id).classList.toggle('hidden',!on)}
 function setStep(n){step=n;ready=false;$('caption').textContent=transcript[n];$('pause').disabled=false}
 function monitor(){if(frame||film.paused)return;frame=requestAnimationFrame(function loop(){frame=0;tick();if(!film.paused&&!ready&&step>=0)frame=requestAnimationFrame(loop)})}
 function tick(){
- if(step<0||ready||formOpen)return;
  const t=film.currentTime;
+ if(formPromptPlaying){if(t>=FORM_PROMPT_END){film.pause();formPromptPlaying=false}return}
+ if(step<0||ready||formOpen)return;
  if(step===0&&t>=9.7)setStep(1);
  if(step===1&&t>=17.86)setStep(2);
  if(step===2&&t>=26.02)return holdQuestion('q1-hold.jpg');
  if(step===3&&t>=37.62)return holdQuestion('q2-hold.jpg');
  if(step===4&&t>=51.02)setStep(5);
- if(step===5&&t>=60.7&&$('ending').classList.contains('hidden')){$('hold').src='assets/cta-hold.jpg';show('hold');show('ending');}
- // The final spoken sentence runs from 60.75s to about 65.57s.
- if(step===5&&t>=65.62)return holdEnding();
+ // Stop before the form prompt. Its voice plays only after the CTA is clicked.
+ if(step===5&&t>=60.7)return holdEnding();
 }
 function holdQuestion(image){
  if(ready)return;ready=true;film.pause();$('pause').disabled=true;
@@ -70,12 +71,16 @@ $('pause').addEventListener('click',async()=>{
 });
 $('speed').addEventListener('click',()=>{speedIndex=(speedIndex+1)%speeds.length;film.playbackRate=speeds[speedIndex];$('speed').textContent=speedLabels[speedIndex]});
 $('caption-toggle').addEventListener('click',()=>{const active=$('caption').classList.contains('hidden');show('caption',active);$('caption-toggle').setAttribute('aria-pressed',String(active))});
-$('consult').addEventListener('click',()=>{
- film.pause();ready=true;formOpen=true;$('pause').disabled=true;requestId ||= crypto.randomUUID();
+$('consult').addEventListener('click',async()=>{
+ ready=true;formOpen=true;$('pause').disabled=true;requestId ||= crypto.randomUUID();
  show('form-panel');show('controls',false);show('caption',false);show('ending',false);
  $('name').focus();
+ if(film.currentTime<FORM_PROMPT_END){
+  formPromptPlaying=true;
+  try{await film.play()}catch{formPromptPlaying=false;film.pause()}
+ }else film.pause();
 });
-$('close-form').addEventListener('click',()=>{if(saving)return;formOpen=false;show('form-panel',false);show('controls');show('ending');$('consult').focus()});
+$('close-form').addEventListener('click',()=>{if(saving)return;film.pause();formPromptPlaying=false;formOpen=false;show('form-panel',false);show('controls');show('ending');$('consult').focus()});
 $('lead-form').addEventListener('submit',async event=>{
  event.preventDefault();if(saving||saved)return;
  show('error',false);saving=true;$('submit').disabled=true;$('close-form').disabled=true;$('submit').textContent='در حال ثبت…';
@@ -87,7 +92,7 @@ $('lead-form').addEventListener('submit',async event=>{
  }catch(error){$('error').textContent=error instanceof TypeError||error.name==='AbortError'?'ارتباط برقرار نشد. اطلاعاتت در فرم مانده؛ دوباره تلاش کن.':error.message;show('error');}
  finally{clearTimeout(timeout);saving=false;$('submit').disabled=false;$('close-form').disabled=false;$('submit').textContent='ثبت درخواست مشاوره';}
 });
-function restart(){film.pause();film.currentTime=0;step=-1;ready=false;priority='';approach='';show('intro');show('controls',false);show('caption',false);show('ending',false);show('question',false);show('hold',false);$('start').disabled=false;$('start').textContent='برای شروع کلیک کن'}
+function restart(){film.pause();film.currentTime=0;step=-1;ready=false;formPromptPlaying=false;priority='';approach='';show('intro');show('controls',false);show('caption',false);show('ending',false);show('question',false);show('hold',false);$('start').disabled=false;$('start').textContent='برای شروع کلیک کن'}
 $('restart').addEventListener('click',restart);
 $('done').addEventListener('click',()=>{formOpen=false;saved=false;requestId='';$('lead-form').reset();show('form-panel',false);show('form-body');show('success',false);show('close-form');restart()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&!film.paused){film.pause();$('pause').textContent='▶';$('pause').setAttribute('aria-label','ادامهٔ پخش')}});
