@@ -1,0 +1,13 @@
+**/node_modules/
+**/.next/
+**/.vinext/
+**/.wrangler/
+**/.sites-runtime/
+**/.openai/
+**/.env*
+**/*.pem
+**/tsconfig.tsbuildinfo
+media/audio/*.wav
+media/hyperframes/assets/voice-master.wav
+media/hyperframes/assets/music-ducked.wav
+media/hyperframes/assets/sfx-mix.wav

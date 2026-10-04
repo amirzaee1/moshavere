@@ -1,0 +1,3 @@
+# Audience / decision
+
+Confirmed: user wants to create curiosity before purchase and get voluntary name/phone consultation leads. Persian conversational voice and very realistic imagery. Hypothesis: a prior disappointing purchase creates a recognizable opening. No market-size or effectiveness assertions. Device: mobile first, sound may be off. Two questions use plain preferences, not diagnostic logic. Trust: explain selection process and let customer decide; no invented proof or guarantees. Action: two fields, input validation, clear save/error state and purpose-specific permission to contact.

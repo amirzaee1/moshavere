@@ -1,0 +1,125 @@
+{
+  "project": "before-you-buy",
+  "version": 2,
+  "created": "2026-10-04",
+  "assets": [
+    {
+      "path": "assets/t01-charcoal-shopping-bag.png",
+      "bytes": 1573960,
+      "sha256": "054aea2b8bee285f2347f6478c0ea066f0891f4959424a13e5d1a540db55b5b8"
+    },
+    {
+      "path": "assets/s03-material-details.png",
+      "bytes": 1830540,
+      "sha256": "740445015b28d41b7e66664d35d4c1fcadc4114d7a32ff76930f0052aaa1c366"
+    },
+    {
+      "path": "assets/s04-friendly-consultation.png",
+      "bytes": 1976514,
+      "sha256": "180e959ec003ca7a2d03cb840ccd6f09bdded3ad96d43a95b2717e9c777231e7"
+    },
+    {
+      "path": "assets/s02-purchase-table.png",
+      "bytes": 2637872,
+      "sha256": "18dfab96b6783be0188cb3df707ebbcc79283042a61201a105ff0d69259083a7"
+    },
+    {
+      "path": "assets/t02-brass-magnifying-glass.png",
+      "bytes": 889432,
+      "sha256": "7ebfd5cfcb48d3144a5d13a23a0ff91d6e45a29406554a4226162f81133a51e3"
+    },
+    {
+      "path": "assets/s01-before-you-buy.png",
+      "bytes": 1888442,
+      "sha256": "6687a7f1d879b34d996e7d7bbf299572de56f08577fff77a956c14cfaa5ebaeb"
+    },
+    {
+      "path": "assets/finished/s03-clean.mp4",
+      "bytes": 5622752,
+      "sha256": "2661e1a7b49954f639352ee5eec1580277c328798f8b6d8e05a8f2dc8cdf23af"
+    },
+    {
+      "path": "assets/finished/s04-clean.mp4",
+      "bytes": 6315627,
+      "sha256": "d8d22f46f1d431524b589e0e32cf1b315306c3d700ead0380255169eade91589"
+    },
+    {
+      "path": "assets/finished/s02-clean.mp4",
+      "bytes": 7210028,
+      "sha256": "c5f79dea7de81e2ab828cf0be6bcd122a65090fec1ba733894d6291ee7fc40ab"
+    },
+    {
+      "path": "assets/finished/s01-clean.mp4",
+      "bytes": 4883766,
+      "sha256": "66541701a1185eda52eec0358a9bcb04d3f5ff2fe347f0b1077251a4f6b7ca0e"
+    },
+    {
+      "path": "assets/narration-vibi-sarah-v01.mp3",
+      "bytes": 1049122,
+      "sha256": "c21f2ebb93731c1c31d9978c4d5e5b7b416a5a65889f9fa2add749f86292e72d"
+    },
+    {
+      "path": "assets/music-original-lyria.mp3",
+      "bytes": 2243373,
+      "sha256": "e5e5684869bc6198d77e8395159ff01c52c7e28f15d96c3a2c78c29317caa948",
+      "public_note": "Original WAV and full-resolution master are retained in owner handoff."
+    }
+  ],
+  "voice": {
+    "provider": "Vibi",
+    "model": "Eleven v4",
+    "voice": "Sarah",
+    "speed": 1,
+    "stability": 50,
+    "similarity": 75,
+    "duration": 65.567313,
+    "credits_observed": 1003,
+    "take": "Before-You-Buy-Sarah-FA-v01",
+    "enhancement_and_normalization": "both applied then settings rechecked",
+    "listening": "unavailable; not accepted as verified"
+  },
+  "video": {
+    "provider": "Google Vids",
+    "settings": "Omni,1080p,portrait,10s",
+    "count": 4,
+    "downloaded_size": [
+      1080,
+      1920
+    ],
+    "downloaded_fps": 30,
+    "project_url": "Private Google Vids source project; owner-only handoff",
+    "finish": "visible sparkle delogo x852 y1690 w96 h100, contrast1.025 saturation0.96; originals retained"
+  },
+  "music": {
+    "provider": "Google Vids Lyria3.5",
+    "setting": "Full / Instrumental",
+    "prompt_record": "references/MUSIC-BRIEF.md (creative direction record, not a verbatim UI prompt)",
+    "original_export_duration": 70.054603
+  },
+  "gates": {
+    "component_lab": "KEEP v03 fresh critic",
+    "narration_acceptance": "blocked: genuine listening unavailable",
+    "full_audiovisual_acceptance": "blocked: genuine listening unavailable",
+    "visual_full_review": "KEEP v02, whole-film visual review v01 plus every-frame revised-transition verification v02; see critic reports",
+    "site_form": "local real D1 write with synthetic data, Persian +98 normalization; mobile form 360/390/430 checked; deployed DB schema confirmed",
+    "release": "private review, no verified-final claim",
+    "motion_numeric_exception": "22.5 s near-static including readable question layouts and final hold; literal numeric target not met, documented reviewer exception"
+  },
+  "site": {
+    "audience": "private",
+    "deployment_status": "succeeded",
+    "live_schema_confirmed": "DB.consultations"
+  },
+  "final_video": {
+    "path": "delivery/Before-You-Buy-1080p.mp4",
+    "bytes": 50159110,
+    "sha256": "19c0bf13547960a0100caed68282ddbdc3cd00c0929dbb0d87471a3de29cf21f",
+    "duration_seconds": 67.2,
+    "width": 1080,
+    "height": 1920,
+    "fps": 60,
+    "integrated_lufs": -17.5,
+    "lra_lu": 2.9,
+    "true_peak_dbfs": -4.7
+  }
+}

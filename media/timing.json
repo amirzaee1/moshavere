@@ -1,0 +1,35 @@
+{
+  "voice": "narration-vibi-sarah-v01.mp3",
+  "duration": 65.567313,
+  "timing_method": "Whisper small word timestamps with waveform boundaries; listening not verified",
+  "segments": [
+    {
+      "start": 0,
+      "end": 9.7
+    },
+    {
+      "start": 9.7,
+      "end": 17.86
+    },
+    {
+      "start": 17.86,
+      "end": 26.1
+    },
+    {
+      "start": 26.1,
+      "end": 37.94
+    },
+    {
+      "start": 37.94,
+      "end": 51.02
+    },
+    {
+      "start": 51.02,
+      "end": 60.75
+    },
+    {
+      "start": 60.75,
+      "end": 65.567
+    }
+  ]
+}

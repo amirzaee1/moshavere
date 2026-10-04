@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fa"><head><meta charset="utf-8"><title>قبل از اینکه بخری</title><style>
+@font-face{font-family:Vazirmatn;src:url('assets/Vazirmatn-500.woff2');font-weight:500}
+@font-face{font-family:Vazirmatn;src:url('assets/Vazirmatn-800.woff2');font-weight:800}
+*{box-sizing:border-box}body{margin:0;background:#111719;color:#f7f3ea;font-family:Vazirmatn,sans-serif;font-weight:500;font-synthesis:none}
+#film{position:relative;width:100%;height:100%;overflow:hidden;background:#111719}.clip{position:absolute;inset:0}.frame{position:absolute;inset:0;overflow:hidden}video{width:100%;height:100%;object-fit:cover}.ambient{position:absolute;inset:0;background:radial-gradient(ellipse at 15% 20%,#8f73372b,transparent 62%)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,#061014aa,transparent 35%,transparent 60%,#091215ed)}.shade-left{background:linear-gradient(90deg,#0710126b,transparent 65%),linear-gradient(180deg,#07101280,transparent 50%,#07101233)}
+.kicker{position:absolute;right:84px;top:150px;font-size:32px;line-height:1.6;color:#e5dccc;letter-spacing:0}.brand{position:absolute;right:82px;top:76px;display:flex;align-items:center;gap:16px;font-size:28px;color:#e5d8bc}.brand i{display:block;width:6px;height:35px;background:#d8b57b;transform:skewY(-20deg)}
+h1,h2,p{margin:0}em{font-style:normal;color:#e3bf81}h1,h2{font-weight:800}.title{position:absolute;top:270px;right:90px;left:90px;font-size:112px;line-height:1.45}.title em{display:block}.sub{font-size:46px;color:#c9cfcb;line-height:1.8}.bottom{position:absolute;left:90px;right:90px;bottom:160px}.foot{position:absolute;left:90px;right:90px;bottom:180px;font-size:35px;color:#c9cfcb;line-height:1.8}
+.opening{position:absolute;left:78px;top:230px;width:425px;text-align:right}.opening .small{font-size:47px;line-height:1.7}.opening h1{font-size:133px;line-height:1.45}.opening .question{font-size:76px;font-weight:800;line-height:1.5;margin-top:60px}.opening-line{height:5px;width:330px;background:#e1be80;margin-top:24px;transform-origin:right}
+.bag{position:absolute;left:75px;top:610px;width:930px;height:930px;object-fit:contain}.reason .title{font-size:91px;top:290px}.reason .bag{width:830px;height:830px;top:730px;left:125px}.only{display:inline-block;color:#e3bf81}.outline{position:absolute;left:235px;top:870px;width:610px;height:650px;border:3px solid #d8b57b;border-radius:8px}
+.table-copy{position:absolute;right:90px;left:90px;bottom:230px;font-size:97px;line-height:1.45;font-weight:800}.table-copy .small{font-size:53px;color:#ece5d5}.table-copy em{display:block}.soft-panel{position:absolute;inset:0;background:linear-gradient(180deg,#11171900 15%,#11171920 36%,#111719ed 85%)}
+.choices{position:absolute;left:90px;right:90px;top:860px}.row{position:relative;display:flex;align-items:center;gap:32px;min-height:180px;border-top:1px solid #c5b08455;padding:35px 0;font-size:62px;font-weight:800;line-height:1.4}.row .num{width:65px;color:#d8b57b;font-size:32px;font-weight:500}.row .accent{position:absolute;top:-2px;right:0;height:4px;background:#d8b57b;width:100%;transform-origin:right}.row small{font-size:35px;font-weight:500;color:#b9c5c1;display:block;margin-top:9px}.choice2 .row{min-height:210px}.choice2 .title{font-size:99px}.choice2 .choices{top:840px}
+.old-path{position:absolute;left:90px;right:90px;top:830px;display:flex;align-items:center;justify-content:space-between;gap:32px;direction:rtl}.node{padding:42px 28px;border:1px solid #c2af894d;font-size:57px;line-height:1.5}.arrow{width:145px;height:2px;background:#d8b57b;position:relative}.arrow:after{content:'';position:absolute;left:0;top:-9px;width:20px;height:20px;border-left:2px solid #d8b57b;border-bottom:2px solid #d8b57b;transform:rotate(45deg)}
+.old-bag{position:absolute;left:200px;top:1070px;width:620px;height:620px;object-fit:contain;opacity:.55}.route .choices{left:415px;right:95px;top:845px}.route .row{border:0;min-height:185px;font-size:59px;gap:22px;white-space:nowrap}.route .row .num{font-size:32px;width:48px}.route-line{position:absolute;right:105px;top:860px;width:2px;height:510px;background:#d8b57b;transform-origin:top}.glass{position:absolute;width:350px;height:350px;left:55px;top:715px;object-fit:contain}.route .title{font-size:106px}.route .foot{font-size:49px}
+.consult-title{position:absolute;right:90px;left:90px;top:1110px;font-size:84px;line-height:1.5}.consult-title em{display:block;font-size:78px}.consult-shade{position:absolute;inset:0;background:linear-gradient(180deg,#1117196b,transparent 18%,transparent 46%,#111719ed 70%,#111719 100%)}
+.cta-panel{position:absolute;left:90px;top:1470px;width:900px;height:150px;background:#dfbb80;border:2px solid #dfbb80;border-radius:18px;transform-origin:center}.cta-label{position:absolute;left:90px;right:90px;top:1504px;text-align:center;font-size:59px;line-height:1.4;font-weight:800;color:#111719}.final-form{position:absolute;left:140px;right:140px;top:900px}.field{font-size:39px;line-height:1.7;margin-bottom:40px}.input{font-size:45px;color:#b6c3c3;border:1px solid #738184;border-radius:8px;padding:27px 30px;margin-top:15px;background:#142326}.submit{background:#dfbb80;color:#111719;border-radius:8px;font-size:42px;font-weight:800;text-align:center;padding:32px 20px;margin-top:48px}.form-note{font-size:29px;text-align:center;color:#bdc8c4;margin-top:35px}.end-title{position:absolute;right:90px;left:90px;top:280px;font-size:89px;line-height:1.45;font-weight:800}.end-title em{display:block}
+.line-flash{position:absolute;right:0;top:0;width:7px;height:1920px;background:#dbb980;transform-origin:top}.light{position:absolute;left:-580px;top:-200px;width:420px;height:2320px;background:linear-gradient(90deg,transparent,#efca812b,transparent);transform:rotate(17deg);pointer-events:none}.chapter-line{position:absolute;bottom:80px;left:90px;right:90px;height:2px;background:#e4d5b11c}.chapter-line b{display:block;height:2px;background:#d8b57b;width:100%;transform-origin:right}.grain{position:absolute;inset:0;box-shadow:inset 0 0 120px #050a0c44;pointer-events:none}
+</style></head><body><div id="film" dir="rtl" data-composition-id="before-you-buy" data-width="1080" data-height="1920" data-fps="60" data-duration="67.2">
+<div class="ambient"></div>
+<video id="photo1" class="clip" src="assets/s01-clean.mp4" data-start="0" data-duration="5.85" data-media-start="0" muted playsinline></video>
+<video id="photo2" class="clip" src="assets/s02-clean.mp4" data-start="9.7" data-duration="10" data-media-start="0" muted playsinline></video>
+<video id="photo3" class="clip" src="assets/s03-clean.mp4" data-start="26.1" data-duration="10" data-media-start="0" muted playsinline></video>
+<video id="photo4" class="clip" src="assets/s04-clean.mp4" data-start="51.02" data-duration="10" data-media-start="0" muted playsinline></video>
+<section class="clip" data-start="0" data-duration="5.85"><div class="frame" id="intro"><div class="shade shade-left"></div><div class="opening"><p class="small" id="everyone">همه می‌گفتن</p><h1 id="great"><em>عالیه.</em></h1><div class="opening-line" id="introLine"></div><p class="question" id="forYou">برای تو چی؟</p></div></div></section>
+<section class="clip reason" data-start="5.85" data-duration="3.85"><div class="frame" id="reason"><div class="ambient"></div><p class="kicker">اون خرید آشنا…</p><h2 class="title">شاید مسئله،<br/><span class="only">فقط محصول</span><br/>نبوده.</h2><img class="bag" src="assets/t01-charcoal-shopping-bag.png" alt=""/><p class="foot">هر انتخاب، از یک نیاز شروع می‌شه.</p></div></section>
+<section class="clip" data-start="9.7" data-duration="5.28"><div class="frame" id="table"><div class="soft-panel"></div><p class="kicker">همه، نیاز یکسانی نداریم.</p><h2 class="table-copy"><span class="small">برای یکی عالیه…</span><em>برای تو چی؟</em></h2></div></section>
+<section class="clip" data-start="14.98" data-duration="11.12"><div class="frame" id="choiceOne"><div id="choiceVeil" class="ambient" style="background:#111719e8"></div><p class="kicker" id="q1Kicker">قبل از معرفی هر محصول</p><h2 class="title" id="needTitle">اول،<em>نیاز تو.</em></h2><h2 class="title" id="q1Title">چی برات<em>مهم‌تره؟</em></h2><img class="bag" id="choiceBag" src="assets/t01-charcoal-shopping-bag.png" alt=""/><div class="outline" id="choiceOutline"></div><div class="choices" id="q1Rows"><div class="row" id="q1a"><span class="num">۰۱</span><span>نتیجهٔ موردنظر</span><b class="accent"></b></div><div class="row" id="q1b"><span class="num">۰۲</span><span>کیفیت محصول</span><b class="accent"></b></div><div class="row" id="q1c"><span class="num">۰۳</span><span>قیمت مناسب</span><b class="accent"></b></div></div><p class="foot" id="q1Foot">از چیزی شروع کن که برای تو مهمه.</p></div></section>
+<section class="clip choice2" data-start="26.1" data-duration="11.84"><div class="frame" id="choiceTwo"><div style="position:absolute;inset:0;background:#111719de"></div><p class="kicker">یک سؤال دیگه</p><h2 class="title">چطور<em>مطمئن‌تر می‌شی؟</em></h2><div class="choices"><div class="row" id="q2a"><span class="num">۰۱</span><span>امتحان محصول<small>اگر امکانش فراهم باشه</small></span><b class="accent"></b></div><div class="row" id="q2b"><span class="num">۰۲</span><span>تجربهٔ دیگران<small>شنیدن تجربهٔ استفاده‌کننده‌ها</small></span><b class="accent"></b></div><div class="row" id="q2c"><span class="num">۰۳</span><span>بررسی تفاوت‌ها<small>شناخت ویژگی و کاربرد محصول</small></span><b class="accent"></b></div></div><p class="foot">ترجیح تو، مسیر گفت‌وگو را مشخص می‌کنه.</p></div></section>
+<section class="clip" data-start="37.94" data-duration="5.28"><div class="frame" id="reverse"><div class="ambient"></div><p class="kicker">می‌شه این‌طور شروع کرد…</p><h2 class="title">اول محصول.<em>بعد، دلیل خرید.</em></h2><div class="old-path"><div class="node" id="oldA">محصول</div><div class="arrow" id="oldArrow"></div><div class="node" id="oldB">دلیل خرید</div></div><img class="old-bag" src="assets/t01-charcoal-shopping-bag.png" alt=""/><p class="foot">نیاز تو کجای این مسیره؟</p></div></section>
+<section class="clip route" data-start="43.22" data-duration="7.8"><div class="frame" id="route"><div class="ambient"></div><p class="kicker">این بار، مسیر را عوض کنیم.</p><h2 class="title">از نیاز تو،<em>تا تصمیم تو.</em></h2><div class="route-line" id="routeLine"></div><div class="choices"><div class="row" id="route1"><span class="num">۰۱</span>نیاز تو</div><div class="row" id="route2"><span class="num">۰۲</span>بررسی محصول</div><div class="row" id="route3"><span class="num">۰۳</span>تصمیم خودت</div></div><img class="glass" id="lens" src="assets/t02-brass-magnifying-glass.png" alt=""/><p class="foot" id="yourDecision">آخرش، انتخاب با توست.</p></div></section>
+<section class="clip" data-start="51.02" data-duration="10"><div class="frame" id="consult"><div class="consult-shade"></div><p class="kicker">مشاوره پیش از خرید</p><h2 class="consult-title">یه گفت‌وگوی کوتاه.<em>برای انتخاب تو.</em></h2></div></section>
+<section class="clip" data-start="57.78" data-duration="9.42"><div class="frame" id="conversion"><div class="ambient" id="endVeil"></div><h2 class="end-title" id="endTitle">از همین‌جا<em>شروع کنیم.</em></h2><div class="cta-panel" id="ctaPanel"></div><div class="cta-label" id="ctaLabel">نیاز به مشاوره دارم</div><div class="final-form" id="finalForm"><div class="field" id="nameField">نام<div class="input">نام شما</div></div><div class="field" id="phoneField">شماره موبایل<div class="input" dir="ltr">۰۹…</div></div><div class="submit" id="submit">ثبت درخواست مشاوره</div><div class="form-note">نام و شماره‌ات را برای همین درخواست بنویس.</div></div></div></section>
+<div class="brand"><i></i>پیش از خرید</div><div class="chapter-line"><b id="progress"></b></div><div class="grain"></div><div class="light" id="light"></div><div class="line-flash" id="seam"></div>
+<audio id="narration" data-audio-group="voiceover" src="assets/voice-master.wav" data-start="0" data-duration="65.567" data-volume="0.96"></audio>
+<audio id="score" data-audio-group="music" src="assets/music-ducked.wav" data-start="0" data-duration="67.2" data-volume="0.96"></audio>
+<audio id="effects" data-audio-group="sfx" src="assets/sfx-mix.wav" data-start="0" data-duration="67.2" data-volume="0.96"></audio>
+</div><script src="assets/gsap.min.js"></script><script>
+const t=gsap.timeline({paused:true});
+gsap.set('#forYou,#q1Title,#q1Rows,#q1Foot,#choiceOutline,#endVeil,#endTitle,#finalForm,#route1,#route2,#route3,#yourDecision',{opacity:0});
+gsap.set('#q1Rows .accent,#choiceTwo .accent,#routeLine,#progress',{scaleX:0});gsap.set('#routeLine',{scaleX:1,scaleY:0});gsap.set('#light,#seam',{opacity:0});
+gsap.set('#ctaPanel,#ctaLabel',{opacity:0});gsap.set('#lens',{opacity:0});
+t.fromTo('#everyone',{y:14},{y:0,duration:.75,ease:'power3.out'},0).fromTo('#great',{y:25,scale:.93},{y:0,scale:1,duration:1.1,ease:'power3.out'},0)
+.fromTo('#introLine',{scaleX:.1},{scaleX:1,duration:1.7,ease:'power2.inOut'},.35)
+.to('#everyone,#great',{opacity:.65,y:-20,duration:.6},3.05).to('#forYou',{opacity:1,duration:.4},3.16).fromTo('#forYou',{y:30},{y:0,duration:.7,ease:'power3.out'},3.16)
+.to('#intro',{x:-85,opacity:0,duration:.35,ease:'power3.in'},5.5);
+t.fromTo('#reason',{x:80,opacity:0},{x:0,opacity:1,duration:.55,ease:'power3.out'},5.85)
+.fromTo('#reason .bag',{y:80,scale:.83},{y:0,scale:1,duration:2.8,ease:'power2.out'},5.85)
+.fromTo('#reason .only',{color:'#f7f3ea'},{color:'#e3bf81',duration:.6},7.3).to('#reason',{opacity:0,y:-55,duration:.32},9.38);
+t.fromTo('#table .table-copy',{y:65,opacity:0},{y:0,opacity:1,duration:.85,ease:'power3.out'},9.8)
+.fromTo('#table .table-copy em',{x:45,opacity:0},{x:0,opacity:1,duration:.8,ease:'power3.out'},12.1)
+.to('#table .table-copy',{y:-40,opacity:0,duration:.35},14.63);
+t.fromTo('#choiceVeil',{opacity:0},{opacity:1,duration:1},14.98)
+.fromTo('#needTitle',{y:50,opacity:0},{y:0,opacity:1,duration:.65,ease:'power3.out'},14.98)
+.fromTo('#choiceBag',{y:100,scale:.83,opacity:0},{y:0,scale:1,opacity:1,duration:.8,ease:'power3.out'},15.15)
+.to('#choiceBag',{y:-80,scale:.84,duration:1.2,ease:'power2.inOut'},16)
+.to('#q1Rows',{opacity:1,duration:.4},17.2).fromTo('#q1Rows .row',{x:60},{x:0,duration:.8,stagger:.2,ease:'power3.out'},17.2)
+.to('#choiceBag',{opacity:0,scale:.95,duration:.45},17.25)
+.fromTo('#choiceOutline',{opacity:0,scale:.66},{opacity:.8,scale:1,duration:.17},17.12)
+.to('#choiceOutline',{x:-140,y:0,scaleX:1.45,scaleY:.85,transformOrigin:'top left',opacity:0,duration:.65,ease:'power3.inOut'},17.3)
+.to('#needTitle,#q1Kicker',{opacity:0,y:-30,duration:.35},17.4)
+.to('#q1Title',{opacity:1,duration:.45},17.86).fromTo('#q1Title',{y:30},{y:0,duration:.65,ease:'power3.out'},17.86)
+.to('#q1Foot',{opacity:1,duration:.5},19.4);
+for(const [id,time] of [['q1a',21.8],['q1b',23.05],['q1c',24.7]]){t.to('#'+id+' .accent',{scaleX:1,duration:.75,ease:'power2.inOut'},time).to('#'+id,{color:'#e3bf81',duration:.3},time).to('#'+id,{color:'#f7f3ea',duration:.35},time+.8)}
+t.to('#choiceOne',{x:-90,opacity:0,duration:.33,ease:'power3.in'},25.77);
+t.fromTo('#choiceTwo',{x:90,opacity:0},{x:0,opacity:1,duration:.55,ease:'power3.out'},26.1)
+.fromTo('#choiceTwo .row',{y:50,opacity:0},{y:0,opacity:1,duration:.75,stagger:.28,ease:'power3.out'},27.75);
+for(const [id,time] of [['q2a',31.9],['q2b',33.95],['q2c',36.15]]){t.to('#'+id+' .accent',{scaleX:1,duration:.9,ease:'power2.inOut'},time).to('#'+id,{color:'#e3bf81',duration:.35},time).to('#'+id,{color:'#f7f3ea',duration:.35},time+1)}
+t.to('#choiceTwo',{opacity:0,duration:.35},37.59);
+t.fromTo('#reverse .title',{x:60,opacity:0},{x:0,opacity:1,duration:.6,ease:'power3.out'},37.94)
+.fromTo('#oldA',{scale:.85,opacity:0},{scale:1,opacity:1,duration:.65},38.3)
+.fromTo('#oldArrow',{scaleX:0},{scaleX:1,duration:1.3,transformOrigin:'right'},39)
+.fromTo('#oldB',{x:30,opacity:0},{x:0,opacity:1,duration:.65},40.4)
+.fromTo('#reverse .old-bag',{y:45,scale:.95},{y:0,scale:1,duration:4.4,ease:'none'},38)
+.to('#reverse',{x:100,opacity:0,duration:.35},42.87);
+t.fromTo('#route .title',{y:45,opacity:0},{y:0,opacity:1,duration:.65,ease:'power3.out'},43.22)
+.fromTo('#lens',{opacity:0,y:-70,scale:.8},{opacity:1,y:0,scale:1,duration:.75,ease:'power2.out'},44.75)
+.to('#route1',{opacity:1,duration:.35},45.8).fromTo('#route1',{x:-35},{x:0,duration:.65},45.8)
+.to('#lens',{y:185,duration:.65,ease:'power2.inOut'},46.55)
+.to('#route2',{opacity:1,duration:.4},47.1).fromTo('#route2',{x:-35},{x:0,duration:.65},47.1)
+.to('#lens',{y:370,duration:.7,ease:'power2.inOut'},48.3)
+.to('#route3',{opacity:1,duration:.4},48.95).fromTo('#route3',{x:-35},{x:0,duration:.65},48.95)
+.to('#routeLine',{scaleY:1,duration:3.9,ease:'none'},45.7)
+.to('#lens',{y:470,x:-40,scale:.7,opacity:0,duration:.6},49.65)
+.to('#route3',{color:'#e3bf81',duration:.4},49.6).to('#yourDecision',{opacity:1,duration:.5},49.8)
+.to('#route',{opacity:0,y:-45,duration:.35},50.67);
+t.fromTo('#consult .consult-title',{y:60,opacity:0},{y:0,opacity:1,duration:.8,ease:'power3.out'},51.2)
+.fromTo('#consult .consult-title em',{x:35,opacity:0},{x:0,opacity:1,duration:.8,ease:'power3.out'},54.5)
+.to('#ctaPanel,#ctaLabel',{opacity:1,duration:.45},57.78)
+.fromTo('#ctaPanel',{y:45,scale:.94},{y:0,scale:1,duration:.7,ease:'power3.out'},57.78)
+.fromTo('#ctaLabel',{y:45},{y:0,duration:.7,ease:'power3.out'},57.78)
+.to('#consult .consult-title',{opacity:0,y:-30,duration:.45},60.55)
+.to('#endVeil',{opacity:1,duration:.45,backgroundColor:'#111719'},60.7)
+.to('#endTitle',{opacity:1,duration:.55},60.95).fromTo('#endTitle',{y:35},{y:0,duration:.8,ease:'power3.out'},60.95)
+.to('#ctaPanel',{y:-745,scaleY:6.5,backgroundColor:'#182528',borderWidth:0,transformOrigin:'top',duration:.8,ease:'power3.inOut'},60.75)
+.to('#ctaLabel',{y:-750,color:'#dfbb80',duration:.7,ease:'power3.inOut'},60.75)
+.to('#finalForm',{opacity:1,duration:.45},60.84).fromTo('#finalForm',{y:70},{y:0,duration:.8,ease:'power3.out'},60.84)
+.fromTo('#nameField,#phoneField,#submit,.form-note',{y:30,opacity:0},{y:0,opacity:1,duration:.55,stagger:.28,ease:'power3.out'},61.45)
+.to('#nameField .input',{borderColor:'#dfbb80',duration:.35},61.45).to('#phoneField .input',{borderColor:'#dfbb80',duration:.35},62.85)
+.fromTo('#submit',{scale:.985},{scale:1,duration:.6,ease:'power2.out'},64.5);
+t.to('#progress',{scaleX:1,duration:65.55,ease:'none'},0);
+function bridge(at,d=.65){t.fromTo('#seam',{x:80,opacity:0,scaleY:.4},{x:-1130,opacity:.65,scaleY:1,duration:d,ease:'power2.inOut',immediateRender:false},at).to('#seam',{opacity:0,duration:.08},at+d-.08)}
+for(const at of [5.57,9.45,14.75,25.86,37.69,42.97,50.77])bridge(at);
+for(const at of [3.1,17.15,26.1,43.22,57.72,60.65]){t.fromTo('#light',{x:0,opacity:0},{x:2050,opacity:.8,duration:1.1,ease:'power2.inOut',immediateRender:false},at)}
+window.__timelines=window.__timelines||{};window.__timelines['before-you-buy']=t;
+</script></body></html>

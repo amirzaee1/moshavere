@@ -1,0 +1,88 @@
+[
+  {
+    "id": "S01",
+    "file": "s01-before-you-buy.png",
+    "transparent": false,
+    "prompt": "Use case: photorealistic-natural. Asset type: independent cinematic still for a Persian interactive consumer consultation film. Generate one vertical 9:16 photographic image at 1152x2048 or higher resolution. Style: exceptionally photorealistic natural advertising photography, not illustration or CGI. Real Iranian middle-class home; charcoal and ink shadows, warm honey window light, cream highlights, very mild 35mm film grain, imperfect lived-in material details, candid emotional realism. No words, no logos, no watermarks, no retailer identities, no statistics, no product benefit claims. Fictional illustrative scene, not a testimonial.\nScene: at a simple dining table in a real Iranian middle-class home, a 32-year-old Iranian woman in a charcoal casual shirt examines two small, CLOSED, unbranded paper retail cartons after shopping. She has a slightly uncertain thoughtful expression, natural skin texture and fine stray hairs. She is seated with her upper half body visible in the lower-right portion of the frame. Hands anatomically normal, softly resting around the two closed cartons. Camera: portrait photography with 50mm lens, natural shallow depth of field. Leave the top-left quadrant uncluttered and softly dark for later type overlay. Do not add any text. Preserve photographic physical plausibility, real fingers and realistic carton folds.",
+    "path": "assets/s01-before-you-buy.png",
+    "generator": "built-in image_gen",
+    "actual_dimensions": [
+      941,
+      1672
+    ],
+    "actual_mode": "RGB",
+    "verified_alpha": false
+  },
+  {
+    "id": "S02",
+    "file": "s02-purchase-table.png",
+    "transparent": false,
+    "prompt": "Use case: photorealistic-natural. Asset type: independent cinematic still for a Persian interactive consumer consultation film. Generate one vertical 9:16 photographic image at 1152x2048 or higher resolution. Style: exceptionally photorealistic natural advertising photography, not illustration or CGI. Real Iranian middle-class home; charcoal and ink shadows, warm honey window light, cream highlights, very mild 35mm film grain, imperfect lived-in material details, candid emotional realism. No words, no logos, no watermarks, no retailer identities, no statistics, no product benefit claims. Fictional illustrative scene, not a testimonial.\nScene: overhead camera looking straight down at a physically realistic home dining table arrangement of THREE different CLOSED unbranded retail parcels or paper shopping packages: a small matte cardboard box, a closed folded cream paper parcel, and a charcoal paper shopping package. A plain narrow purchase receipt is present with absolutely NO readable marks or text. A single realistic adult hand rests NEXT TO a parcel without interacting with it yet. Warm raking window light, believable contact shadows and folds. Composition: packages near upper and lower regions, preserve a clean quiet horizontal middle strip of table surface for a later graphic overlay. Candid actual overhead product photography; no floating items, no artificial perfection.",
+    "path": "assets/s02-purchase-table.png",
+    "generator": "built-in image_gen",
+    "actual_dimensions": [
+      941,
+      1672
+    ],
+    "actual_mode": "RGB",
+    "verified_alpha": false,
+    "qa_note": "The charcoal shopping bag has an open top with no visible contents; other two parcels are closed. Receipt contains only faint unreadable marks."
+  },
+  {
+    "id": "S03",
+    "file": "s03-material-details.png",
+    "transparent": false,
+    "prompt": "Use case: photorealistic-natural. Asset type: independent cinematic macro still for a Persian interactive consumer consultation film. Generate one vertical 9:16 photographic image at 1152x2048 or higher resolution. Style: exceptionally photorealistic natural advertising photography, not illustration or CGI. Real Iranian middle-class home; charcoal and ink shadows, warm honey window light, cream highlights, very mild 35mm film grain, imperfect lived-in material details, candid emotional realism. No words, no logos, no watermarks, no retailer identities, no statistics, no product benefit claims. Fictional illustrative scene, not a testimonial.\nScene: macro neutral consumer-object textures on a home tabletop: an UNBRANDED frosted glass jar with a plain neutral lid and the edge of matte cardboard packaging. No contents visible and no medical implication. Camera: 100mm macro lens, shallow depth of field, recognizable legible physical shapes. Show believable fine surface imperfections, subtle dust, paper fibers, glass reflections and edge highlights. Natural premium photography with cream and charcoal tones and gentle warm honey side light. Full-frame atmospheric close study, no text or ornamental graphics, avoid perfect CGI smoothness.",
+    "path": "assets/s03-material-details.png",
+    "generator": "built-in image_gen",
+    "actual_dimensions": [
+      941,
+      1672
+    ],
+    "actual_mode": "RGB",
+    "verified_alpha": false
+  },
+  {
+    "id": "S04",
+    "file": "s04-friendly-consultation.png",
+    "transparent": false,
+    "prompt": "Use case: photorealistic-natural. Asset type: independent cinematic still for a Persian interactive consumer consultation film. Generate one vertical 9:16 photographic image at 1152x2048 or higher resolution. Style: exceptionally photorealistic natural advertising photography, not illustration or CGI. Real Iranian middle-class home; charcoal and ink shadows, warm honey window light, cream highlights, very mild 35mm film grain, imperfect lived-in material details, candid emotional realism. No words, no logos, no watermarks, no retailer identities, no statistics, no product benefit claims. Fictional illustrative scene, not a testimonial.\nScene: friendly everyday consultation at a home table. A 35-year-old Iranian woman listens thoughtfully to a 35-year-old Iranian man; both in plain casual clothes. Neither wears medical, financial, corporate, or professional uniforms. Both have natural candid faces and relaxed body language, normal hands. On the table sit an EMPTY notepad with no marks and simple tea glasses. Camera eye-level 35mm photography. Place both faces and primary interaction in upper two-thirds and preserve the lower third as a softly detailed, calm table area for later type. Warm real window lighting, believable home background, gentle respectful conversational mood. No written text, no props implying professional credentials.",
+    "path": "assets/s04-friendly-consultation.png",
+    "generator": "built-in image_gen",
+    "actual_dimensions": [
+      941,
+      1672
+    ],
+    "actual_mode": "RGB",
+    "verified_alpha": false
+  },
+  {
+    "id": "T01",
+    "file": "t01-charcoal-shopping-bag.png",
+    "transparent": true,
+    "prompt": "Use case: product-mockup. Asset type: photorealistic transparent cutout for motion compositing. Generate one real charcoal paper shopping bag, three-quarter view, full object visible including base and handles, centered with generous clean margins on every side. Fine visible paper fibers, subtle folds and realistic creases, warm cream rope handles, unprinted no words or logos. Natural premium product photography, crisp believable material, soft warm honey side light with cream highlights and ink shadows. At least 1536x1536 pixels. Actual alpha transparent background everywhere outside the object and through the open handle holes. No background plane, no environment, no checkerboard baked into image, no drop shadow outside the object, no text, no watermark, no duplicate object.",
+    "path": "assets/t01-charcoal-shopping-bag.png",
+    "generator": "built-in image_gen",
+    "actual_dimensions": [
+      1254,
+      1254
+    ],
+    "actual_mode": "RGBA",
+    "verified_alpha": true
+  },
+  {
+    "id": "T02",
+    "file": "t02-brass-magnifying-glass.png",
+    "transparent": true,
+    "prompt": "Use case: product-mockup. Asset type: photorealistic transparent cutout for motion compositing. Generate one simple real handheld magnifying glass: brushed-brass circular rim, optically clear glass lens, plain charcoal handle, slight warm reflection. Full object visible from top left rim to bottom right handle, elegant diagonal placement, centered with generous clean margins. Natural premium photographic realism: subtle brushed metal microtexture, believable glass thickness and refraction, no ornate decoration. At least 1536x1536 pixels. Actual alpha transparent background everywhere outside object. The clear glass lens must be optically transparent with subtle edge reflections, suitable to overlay another scene. No background plane, no environment, no checkerboard baked into image, no drop shadow outside the object, no words, no logos, no watermark, no duplicate object.",
+    "path": "assets/t02-brass-magnifying-glass.png",
+    "generator": "built-in image_gen",
+    "actual_dimensions": [
+      1254,
+      1254
+    ],
+    "actual_mode": "RGBA",
+    "verified_alpha": true,
+    "qa_note": "Genuine transparency verified: sample lens center alpha 75/255; outer background alpha 0."
+  }
+]
