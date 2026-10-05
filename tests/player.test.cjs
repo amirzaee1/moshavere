@@ -28,11 +28,15 @@ function setup() {
 }
 (async()=>{
   const a=setup();a.fireTimers();assert(a.film.paused&&a.voice.paused,'No autoplay');await a.start();
-  for(const time of [1,14.71,28.21,38.68,52.18,63.91,79.197]){a.film.currentTime=time;a.film.emit('timeupdate');assert.equal(a.run('phase'),'playing');assert.equal(a.nodes.has('#consult'),false)}
+  a.film.currentTime=14.68;a.film.emit('timeupdate');assert.equal(a.run('phase'),'playing','First voice finishes before pause');
+  a.film.currentTime=14.7;a.fireTimers();assert.equal(a.run('phase'),'question');assert(a.film.paused);assert(a.nodes.has('#many-times'));assert.equal(a.voice.playCount,0);
+  a.film.emit('timeupdate');assert.equal(a.run('phase'),'question');
+  const position=a.film.currentTime;a.nodes.get('#many-times').emit('click');await Promise.resolve();assert.equal(a.film.currentTime,position,'Resume without rewind');assert.equal(a.film.paused,false);
+  for(const time of [14.71,28.21,38.68,52.18,63.91,79.197]){a.film.currentTime=time;a.film.emit('timeupdate');assert.equal(a.run('phase'),'playing');assert.equal(a.nodes.has('#consult'),false);assert.equal(a.nodes.has('#many-times'),false)}
   assert.equal(a.film.srcCount,1,'One video source for all chapters');assert.equal(a.voice.playCount,0,'Guide never starts during movie');
   a.film.paused=true;a.film.emit('ended');assert.equal(a.run('phase'),'cta');assert(a.nodes.has('#consult'));
   a.nodes.get('#consult').emit('click');assert.equal(a.run('phase'),'form');assert.equal(a.voice.playCount,1);
-  console.log('PASS: two journey clicks, six continuous chapters, full ending, guide gated');
+  console.log('PASS: three journey clicks, one Barha pause, same source/time, full ending, guide gated');
   const b=setup();let oldDone;b.film.nextPlay=new Promise(r=>oldDone=r);await b.start();b.document.hidden=true;b.document.events.visibilitychange();assert.equal(b.run('phase'),'paused');b.document.hidden=false;b.nodes.get('#resume').emit('click');await Promise.resolve();oldDone();await Promise.resolve();assert.equal(b.film.paused,false);
   console.log('PASS: obsolete promise cannot pause resumed playback');
   const c=setup();c.fireTimers();await c.start();c.film.emit('stalled');assert.equal(c.run('stallTimer'),0);c.film.readyState=2;c.film.emit('waiting');c.film.currentTime=1;c.fireTimers();assert.equal(c.run('phase'),'playing');

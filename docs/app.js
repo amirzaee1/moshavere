@@ -21,6 +21,17 @@ const FILM=MEDIA+'hamdeli-continuous-v18.mp4',GUIDE=MEDIA+'hamdeli-guide-v18.m4a
 const offsets=durations.map((_,i)=>durations.slice(0,i).reduce((a,b)=>a+b,0));
 let phase='intro',chapter=0,token=0,consent=false,busy=false,requestId='',requestPayload='',reference='';
 let lastCue='',stallTimer=0,clickAt=0,resumeAt=0;
+let answered=false,questionTimer=0;
+function checkQuestion(){
+ clearTimeout(questionTimer);questionTimer=0;
+ if(phase!=='playing'||answered||film.paused)return false;
+ const remaining=offsets[1]-film.currentTime;
+ if(remaining<=0){
+  resumeAt=film.currentTime;stop();phase='question';render();return true;
+ }
+ questionTimer=setTimeout(checkQuestion,Math.max(16,remaining/rate*1000));
+ return false;
+}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function show(el,on){el.classList.toggle('hidden',!on)}
 function setError(text=''){const box=$('#error');box.textContent=text;show(box,!!text)}
@@ -41,6 +52,7 @@ function render(){
  if(phase==='intro')stage.innerHTML='<div class="intro panel"><span class="eyebrow">پیام ساعت ۱۱:۴۷</span><h1>یک پیام.<br>یک سؤال.<br><em>یک مسیر تازه.</em></h1><p>این یک تبلیغ معمولی نیست؛ یک گفت‌وگوی کوتاه دربارهٔ اثری است که شاید همین حالا روی انتخاب آدم‌ها داری.</p><button class="primary" id="start">برای شروع کلیک کن <span>▶</span></button><small>هیچ صدایی پیش از کلیک تو پخش نمی‌شود.</small></div>';
  else if(phase==='playing')stage.innerHTML=panelStory();
  else if(phase==='paused')stage.innerHTML=panelStory(true);
+ else if(phase==='question')stage.innerHTML='<div class="panel decision"><span class="eyebrow">یک تجربهٔ آشنا</span><h1>چند بار این اتفاق<br>برات افتاده؟</h1><button class="primary" id="many-times">بارها <span>←</span></button></div>';
  else if(phase==='cta')stage.innerHTML='<div class="panel decision"><span class="eyebrow">تصمیم با توست</span><h1>می‌خواهی ببینی<br><em>سهم تو کجاست؟</em></h1><p>موضوع دقیق، شرایط همکاری و نحوهٔ محاسبهٔ سهم را بشنو؛ بعد خودت تصمیم بگیر.</p><button class="primary pulse" id="consult">آره؛ نیاز به مشاوره دارم</button><small>راهنمای نام و شماره فقط بعد از همین کلیک پخش می‌شود.</small></div>';
  else if(phase==='form')stage.innerHTML=`<form class="panel form" id="lead-form"><button type="button" class="back" id="back">بازگشت</button><span class="eyebrow">یک قدم تا گفت‌وگو</span><h1>اسمت و شمارهٔ موبایلت را بنویس.</h1><button type="button" class="back guide" id="guide">پخش / ادامهٔ راهنمای فرم</button><p>برای توضیح موضوع، شرایط همکاری و نحوهٔ محاسبهٔ سهم با تو تماس گرفته می‌شود.</p><label for="name">نام و نام خانوادگی</label><input id="name" name="name" required minlength="2" maxlength="80" autocomplete="name" placeholder="نام تو"><label for="mobile">شماره موبایل</label><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" maxlength="18" required placeholder="0912 345 6789"><div class="trap"><input id="website" tabindex="-1" autocomplete="off"></div><label class="consent"><input id="consent" type="checkbox" ${consent?'checked':''}><span>موافقم از نام و شماره‌ام فقط برای تماس دربارهٔ این درخواست استفاده شود.</span></label><button class="primary" id="submit" ${consent?'':'disabled'}>ثبت درخواست مشاوره</button><small>ثبت درخواست، تعهد به خرید یا همکاری نیست.</small></form>`;
  else stage.innerHTML=`<div class="panel decision"><div class="success-mark">✓</div><h1>درخواستت ثبت شد.</h1><p>شماره‌ات فقط برای پیگیری همین گفت‌وگو ذخیره شد.</p><span class="reference">کد پیگیری: <b dir="ltr">${esc(reference||requestId.slice(0,8))}</b></span></div>`;
@@ -50,13 +62,14 @@ function render(){
 function bind(){
  $('#start')?.addEventListener('click',()=>{if(phase!=='intro')return;clickAt=performance.now();playFilm()});
  $('#resume')?.addEventListener('click',()=>playFilm());
+ $('#many-times')?.addEventListener('click',()=>{if(phase!=='question')return;answered=true;clickAt=performance.now();playFilm()});
  $('#consult')?.addEventListener('click',()=>{if(phase!=='cta')return;phase='form';render();clickAt=performance.now();playGuide(true)});
  $('#guide')?.addEventListener('click',toggleGuide);
  $('#back')?.addEventListener('click',()=>{if(busy)return;stop();phase='cta';render()});
  $('#consent')?.addEventListener('change',e=>{consent=e.target.checked;$('#submit').disabled=!consent});
  $('#lead-form')?.addEventListener('submit',submitForm);
 }
-function stop(){token++;film.pause();voice.pause();clearStall();hideType()}
+function stop(){token++;clearTimeout(questionTimer);questionTimer=0;film.pause();voice.pause();clearStall();hideType()}
 function recoverFilm(text){
  if(phase!=='playing')return;
  resumeAt=film.currentTime;stop();phase='paused';render();setError(text);
@@ -86,6 +99,7 @@ function toggleGuide(){
 }
 function updateTimeline(){
  if(phase!=='playing')return;
+ if(checkQuestion())return;
  const time=film.currentTime;
  let next=0;for(let i=1;i<offsets.length;i++)if(time>=offsets[i])next=i;
  if(next!==chapter){chapter=next;lastCue='';render()}
