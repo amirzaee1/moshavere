@@ -37,6 +37,8 @@ function setup() {
   a.film.paused=true;a.film.emit('ended');assert.equal(a.run('phase'),'cta');assert(a.nodes.has('#consult'));
   a.nodes.get('#consult').emit('click');assert.equal(a.run('phase'),'form');assert.equal(a.voice.playCount,1);
   console.log('PASS: three journey clicks, one Barha pause, same source/time, full ending, guide gated');
+  const negative=setup();await negative.start();negative.film.currentTime=14.7;negative.film.emit('timeupdate');assert(negative.nodes.has('#many-times')&&negative.nodes.has('#not-yet'));negative.nodes.get('#not-yet').emit('click');await Promise.resolve();assert.equal(negative.run('phase'),'playing');assert.equal(negative.film.currentTime,14.7);assert.equal(negative.film.srcCount,1);assert.equal(negative.voice.playCount,0);assert(negative.run('answered'));
+  console.log('PASS: both answer options resume without reloading or extra journey steps');
   const b=setup();let oldDone;b.film.nextPlay=new Promise(r=>oldDone=r);await b.start();b.document.hidden=true;b.document.events.visibilitychange();assert.equal(b.run('phase'),'paused');b.document.hidden=false;b.nodes.get('#resume').emit('click');await Promise.resolve();oldDone();await Promise.resolve();assert.equal(b.film.paused,false);
   console.log('PASS: obsolete promise cannot pause resumed playback');
   const c=setup();c.fireTimers();await c.start();c.film.emit('stalled');assert.equal(c.run('stallTimer'),0);c.film.readyState=2;c.film.emit('waiting');c.film.currentTime=1;c.fireTimers();assert.equal(c.run('phase'),'playing');
