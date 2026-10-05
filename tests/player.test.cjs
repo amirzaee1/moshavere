@@ -16,7 +16,7 @@ function setup() {
     load(){this.error=null}
     play(){this.playCount++;this.paused=false;if(this.nextPlay){const p=this.nextPlay;this.nextPlay=null;return p}this.emit('playing');return Promise.resolve()}
     pause(){this.paused=true}
-    set innerHTML(value){this.html=value;if(this.id==='stage'){for(const id of this.dynamicIds||[])nodes.delete('#'+id);this.dynamicIds=[...value.matchAll(/id="([^"]+)"/g)].map(x=>x[1]);for(const id of this.dynamicIds)nodes.set('#'+id,new Element(id))}}
+    set innerHTML(value){this.renderCount=(this.renderCount||0)+1;this.html=value;if(this.id==='stage'){for(const id of this.dynamicIds||[])nodes.delete('#'+id);this.dynamicIds=[...value.matchAll(/id="([^"]+)"/g)].map(x=>x[1]);for(const id of this.dynamicIds)nodes.set('#'+id,new Element(id))}}
     get innerHTML(){return this.html}
   }
   for(const name of ['#stage','#voice','#film','#motion-type','#clock','#message','#error','#play-status','#progress','.visual','.experience'])nodes.set(name,new Element(name.slice(1)));
@@ -31,7 +31,7 @@ function setup() {
   a.film.currentTime=14.68;a.film.emit('timeupdate');assert.equal(a.run('phase'),'playing','First voice finishes before pause');
   a.film.currentTime=14.7;a.fireTimers();assert.equal(a.run('phase'),'question');assert(a.film.paused);assert(a.nodes.has('#many-times'));assert.equal(a.voice.playCount,0);
   a.film.emit('timeupdate');assert.equal(a.run('phase'),'question');
-  const position=a.film.currentTime;a.nodes.get('#many-times').emit('click');await Promise.resolve();assert.equal(a.film.currentTime,position,'Resume without rewind');assert.equal(a.film.paused,false);
+  const position=a.film.currentTime,renders=a.nodes.get('#stage').renderCount;a.nodes.get('#many-times').emit('click');await Promise.resolve();assert.equal(a.film.currentTime,position,'Resume without rewind');assert.equal(a.film.paused,false);assert.equal(a.nodes.get('#stage').renderCount-renders,1,'Only one panel render on answer click');
   for(const time of [14.71,28.21,38.68,52.18,63.91,79.197]){a.film.currentTime=time;a.film.emit('timeupdate');assert.equal(a.run('phase'),'playing');assert.equal(a.nodes.has('#consult'),false);assert.equal(a.nodes.has('#many-times'),false)}
   assert.equal(a.film.srcCount,1,'One video source for all chapters');assert.equal(a.voice.playCount,0,'Guide never starts during movie');
   a.film.paused=true;a.film.emit('ended');assert.equal(a.run('phase'),'cta');assert(a.nodes.has('#consult'));

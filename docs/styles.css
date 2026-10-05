@@ -14,8 +14,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:28p
 h1{letter-spacing:0}
 .play-status{position:absolute;top:112px;left:50%;transform:translateX(-50%);z-index:8;padding:8px 14px;border-radius:12px;background:#102d35eb;font-size:.85rem;max-width:90%;text-align:center;pointer-events:none}
 @media(max-width:700px){
- .experience[data-phase="playing"],.experience[data-phase="paused"]{height:100svh;min-height:620px}
- .experience[data-phase="playing"] .stage,.experience[data-phase="paused"] .stage{min-height:0;padding:0 20px 12px}
+ .experience{min-height:max(620px,100svh)}
+ .experience:not([data-phase="form"]):not([data-phase="success"]){height:max(620px,100svh)}
+ .experience .stage{min-height:0;padding:24px 20px 12px}
  .story .eyebrow{margin-bottom:4px;font-size:.75rem}
  .story h1{font-size:clamp(1.12rem,4.9vw,1.35rem);line-height:1.5}
  .story p{font-size:.875rem;line-height:1.7;margin-top:4px}
@@ -30,3 +31,6 @@ h1{letter-spacing:0}
  .back,.guide{min-height:44px}
  .form input:not([type=checkbox]){font-size:16px;min-height:44px}
 }
+.experience[data-phase="playing"] .panel,.experience[data-phase="question"] .panel,.experience[data-phase="form"] .panel{animation:none}
+.cinema{transform:translateZ(0);backface-visibility:hidden}
+.stage{contain:layout style}

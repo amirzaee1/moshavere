@@ -17,11 +17,12 @@ const cues=[
 ];
 
 const $=s=>document.querySelector(s),stage=$('#stage'),voice=$('#voice'),film=$('#film'),motion=$('#motion-type');
-const FILM=MEDIA+'hamdeli-continuous-v18.mp4',GUIDE=MEDIA+'hamdeli-guide-v18.m4a';
+const FILM=MEDIA+'hamdeli-continuous-v21.mp4',GUIDE=MEDIA+'hamdeli-guide-v18.m4a';
 const offsets=durations.map((_,i)=>durations.slice(0,i).reduce((a,b)=>a+b,0));
 let phase='intro',chapter=0,token=0,consent=false,busy=false,requestId='',requestPayload='',reference='';
 let lastCue='',stallTimer=0,clickAt=0,resumeAt=0;
 let answered=false,questionTimer=0;
+function chapterAt(time){let next=0;for(let i=1;i<offsets.length;i++)if(time>=offsets[i])next=i;return next}
 function checkQuestion(){
  clearTimeout(questionTimer);questionTimer=0;
  if(phase!=='playing'||answered||film.paused)return false;
@@ -75,7 +76,7 @@ function recoverFilm(text){
  resumeAt=film.currentTime;stop();phase='paused';render();setError(text);
 }
 async function playFilm(){
- const mine=++token;setError();phase='playing';render();primeFilm();
+ const mine=++token;setError();phase='playing';chapter=chapterAt(film.currentTime);render();primeFilm();
  if(film.error){
   film.load();
   film.addEventListener('loadedmetadata',()=>{if(mine===token)film.currentTime=resumeAt},{once:true});
@@ -101,7 +102,7 @@ function updateTimeline(){
  if(phase!=='playing')return;
  if(checkQuestion())return;
  const time=film.currentTime;
- let next=0;for(let i=1;i<offsets.length;i++)if(time>=offsets[i])next=i;
+ const next=chapterAt(time);
  if(next!==chapter){chapter=next;lastCue='';render()}
  progress(time);
  if(time>total-20)primeGuide();
@@ -171,5 +172,4 @@ function normalize(s){return s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.inde
 async function submitForm(e){e.preventDefault();if(busy||!consent)return;const name=$('#name').value.trim(),mobile=normalize($('#mobile').value);if(name.length<2||!/^09\d{9}$/.test(mobile)){setError('نام و شماره موبایل را بررسی کن.');return}busy=true;setError();const submit=$('#submit'),back=$('#back'),guide=$('#guide');submit.disabled=true;submit.textContent='در حال ثبت…';back.disabled=guide.disabled=true;stop();const payload=JSON.stringify({name,mobile,consent:true});if(payload!==requestPayload){requestId=makeRequestId();requestPayload=payload}const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
  try{const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:requestId,name,mobile,consent:true,website:$('#website').value}),signal:controller.signal});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'ثبت انجام نشد.');reference=String(data.reference||requestId.slice(0,8));phase='success';render()}catch(err){setError(err.name==='AbortError'?'ارتباط طول کشید؛ دوباره تلاش کن.':err.message||'ارتباط برقرار نشد؛ دوباره تلاش کن.');submit.disabled=!consent;submit.textContent='ثبت درخواست مشاوره';back.disabled=guide.disabled=false}finally{clearTimeout(timeout);busy=false}}
 
-film.poster=MEDIA+posters[0];progress();render();
-if('requestIdleCallback'in window)requestIdleCallback(primeFilm,{timeout:900});else setTimeout(primeFilm,350);
+film.poster=MEDIA+posters[0];progress();render();primeFilm();
