@@ -2,6 +2,7 @@ const MEDIA='https://sahm-hamdeli.amirzaee123.chatgpt.site/media/';
 const API='https://sahm-hamdeli.amirzaee123.chatgpt.site/api/requests';
 const rate=1.05;
 const durations=[14.680813,13.479125,10.448938,13.479125,11.728938,15.30775];
+const questionStops=new Set([1,3]);
 const total=durations.reduce((a,b)=>a+b,0);
 const posters=['night-phone.webp','home.webp','cafe-woman.webp','shop.webp','bathroom-woman.webp','window-woman.webp'];
 const titles=['یک پیام، یک اعتماد','واقعیتِ همین روزها','یک تکه از قصه کم است','اسمش اقتصاد مشارکتی است','محصول، فقط یک سرنخ است','قرار نیست زندگی‌ات را عوض کنی'];
@@ -19,12 +20,21 @@ const cues=[
 ];
 const $=s=>document.querySelector(s),stage=$('#stage'),voice=$('#voice'),music=$('#music'),film=$('#film'),motion=$('#motion-type');
 let phase='intro',chapter=0,token=0,consent=false,busy=false,requestId='',requestPayload='',reference='';
+const warmed=new Map();
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function show(el,on){el.classList.toggle('hidden',!on)}
 function setError(text=''){const box=$('#error');box.textContent=text;show(box,!!text)}
 function setMedia(loadSource=false){
  const src=MEDIA+`chapter-${chapter+1}-cinematic-final.mp4`;film.poster=MEDIA+posters[chapter];
- if(loadSource&&film.getAttribute('src')!==src){film.src=src;film.load()}
+ if(loadSource&&film.getAttribute('src')!==src){film.preload='auto';film.src=src;film.load()}
+}
+function warmNextChapter(){
+ const next=chapter+1;if(next>=durations.length||warmed.has(next))return;
+ const video=document.createElement('video'),audio=new Audio(),poster=new Image();
+ video.preload='auto';video.muted=true;video.playsInline=true;video.src=MEDIA+`chapter-${next+1}-cinematic-final.mp4`;
+ audio.preload='auto';audio.src=MEDIA+`voice-v4c-${next+1}.mp3`;poster.src=MEDIA+posters[next];video.load();audio.load();
+ warmed.set(next,{video,audio,poster});
+ if(warmed.size>2){const first=warmed.keys().next().value,old=warmed.get(first);old.video.removeAttribute('src');old.audio.removeAttribute('src');warmed.delete(first)}
 }
 function chapterOffset(){return durations.slice(0,chapter).reduce((a,b)=>a+b,0)}
 function seek(media,time,mine=token){
@@ -56,10 +66,10 @@ function bind(){
 }
 function stop(){token++;voice.pause();music.pause();film.pause();show(motion,false);show($('#clock'),false);show($('#message'),false)}
 async function playChapter(){
- const mine=++token;setError();setMedia(true);voice.src=MEDIA+`voice-v4c-${chapter+1}.mp3`;voice.load();if(!music.getAttribute('src')){music.src=MEDIA+'hamdeli-score-v10.mp3';music.load()}
+ const mine=++token;setError();setMedia(true);voice.preload='auto';voice.src=MEDIA+`voice-v4c-${chapter+1}.mp3`;voice.load();if(!music.getAttribute('src')){music.src=MEDIA+'hamdeli-score-v10.mp3';music.load()}
  film.currentTime=0;voice.currentTime=0;film.playbackRate=voice.playbackRate=music.playbackRate=rate;music.volume=.105;seek(music,chapterOffset(),mine);
  voice.addEventListener('playing',()=>{if(mine!==token||phase!=='playing')return;seek(film,voice.currentTime,mine);seek(music,chapterOffset()+voice.currentTime,mine)},{once:true});
- try{await Promise.all([voice.play(),film.play(),music.play()]);if(mine!==token){voice.pause();film.pause();music.pause()}}catch{if(mine===token){stop();phase='paused';render();setError('پخش شروع نشد؛ برای تلاش دوباره روی «ادامهٔ پخش» بزن.')}}
+ try{await Promise.all([voice.play(),film.play(),music.play()]);if(mine!==token){voice.pause();film.pause();music.pause()}else warmNextChapter()}catch{if(mine===token){stop();phase='paused';render();setError('پخش شروع نشد؛ برای تلاش دوباره روی «ادامهٔ پخش» بزن.')}}
 }
 async function resumeChapter(){
  const mine=++token;setError();phase='playing';render();film.playbackRate=voice.playbackRate=music.playbackRate=rate;seek(film,voice.currentTime,mine);seek(music,chapterOffset()+voice.currentTime,mine);
@@ -82,7 +92,16 @@ voice.addEventListener('timeupdate',()=>{
  show($('#clock'),chapter===0&&t<1.65);show($('#message'),chapter===0&&t>=1.15&&t<7.1);
  if(chapter===0&&t<7){show(motion,false);return}const beat=Math.min(2,Math.floor(Math.min(t,durations[chapter])/durations[chapter]*3)),c=cues[chapter][beat];motion.className=`type-direction type-${chapter+1} beat-${beat}`;motion.querySelector('span').textContent=c[0];motion.querySelector('b').textContent=c[1];motion.querySelector('em').textContent=c[2];show(motion,true);
 });
-function finishVoice(){film.pause();music.pause();show(motion,false);show($('#clock'),false);show($('#message'),false);if(phase==='playing'){progress(durations[chapter]);phase=chapter===5?'cta':'question';render()}else if(phase==='form'){const button=$('#guide');if(button)button.textContent='پخش دوبارهٔ راهنمای فرم'}}
+function finishVoice(){
+ film.pause();show(motion,false);show($('#clock'),false);show($('#message'),false);
+ if(phase==='playing'){
+  progress(durations[chapter]);
+  if(chapter===5){music.pause();phase='cta';render();return}
+  if(questionStops.has(chapter)){music.pause();phase='question';render();return}
+  chapter++;phase='playing';render();playChapter();return
+ }
+ if(phase==='form'){music.pause();const button=$('#guide');if(button)button.textContent='پخش دوبارهٔ راهنمای فرم'}
+}
 voice.addEventListener('ended',finishVoice);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)return;if(phase==='playing'){stop();phase='paused';render()}else if(phase==='form'&&!voice.paused){token++;voice.pause();music.pause();const button=$('#guide');if(button)button.textContent='ادامهٔ راهنمای فرم'}});
 function normalize(s){return s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g,'').replace(/^0098/,'0').replace(/^98/,'0')}
