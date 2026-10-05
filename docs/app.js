@@ -2,7 +2,7 @@ const MEDIA='https://sahm-hamdeli.amirzaee123.chatgpt.site/media/';
 const API='https://sahm-hamdeli.amirzaee123.chatgpt.site/api/requests';
 const rate=1.05;
 const durations=[14.680813,13.479125,10.448938,13.479125,11.728938,15.30775];
-const questionStops=new Set([1,3]);
+const questionStops=new Set();
 const total=durations.reduce((a,b)=>a+b,0);
 const posters=['night-phone.webp','home.webp','cafe-woman.webp','shop.webp','bathroom-woman.webp','window-woman.webp'];
 const titles=['یک پیام، یک اعتماد','واقعیتِ همین روزها','یک تکه از قصه کم است','اسمش اقتصاد مشارکتی است','محصول، فقط یک سرنخ است','قرار نیست زندگی‌ات را عوض کنی'];
@@ -36,6 +36,13 @@ function warmNextChapter(){
  warmed.set(next,{video,audio,poster});
  if(warmed.size>2){const first=warmed.keys().next().value,old=warmed.get(first);old.video.removeAttribute('src');old.audio.removeAttribute('src');warmed.delete(first)}
 }
+function primeFirstChapter(){
+ if(phase!=='intro'||chapter!==0)return;
+ setMedia(true);
+ const firstVoice=MEDIA+'voice-v4c-1.mp3';
+ if(voice.getAttribute('src')!==firstVoice){voice.preload='auto';voice.src=firstVoice;voice.load()}
+ if(!music.getAttribute('src')){music.preload='auto';music.src=MEDIA+'hamdeli-score-v10.mp3';music.load()}
+}
 function chapterOffset(){return durations.slice(0,chapter).reduce((a,b)=>a+b,0)}
 function seek(media,time,mine=token){
  const apply=()=>{if(mine!==token)return;try{media.currentTime=Math.max(0,time)}catch{}}
@@ -66,10 +73,10 @@ function bind(){
 }
 function stop(){token++;voice.pause();music.pause();film.pause();show(motion,false);show($('#clock'),false);show($('#message'),false)}
 async function playChapter(){
- const mine=++token;setError();setMedia(true);voice.preload='auto';voice.src=MEDIA+`voice-v4c-${chapter+1}.mp3`;voice.load();if(!music.getAttribute('src')){music.src=MEDIA+'hamdeli-score-v10.mp3';music.load()}
+ const mine=++token;setError();setMedia(true);const voiceSrc=MEDIA+`voice-v4c-${chapter+1}.mp3`;voice.preload='auto';if(voice.getAttribute('src')!==voiceSrc){voice.src=voiceSrc;voice.load()}if(!music.getAttribute('src')){music.src=MEDIA+'hamdeli-score-v10.mp3';music.load()}
  film.currentTime=0;voice.currentTime=0;film.playbackRate=voice.playbackRate=music.playbackRate=rate;music.volume=.105;seek(music,chapterOffset(),mine);
  voice.addEventListener('playing',()=>{if(mine!==token||phase!=='playing')return;seek(film,voice.currentTime,mine);seek(music,chapterOffset()+voice.currentTime,mine)},{once:true});
- try{await Promise.all([voice.play(),film.play(),music.play()]);if(mine!==token){voice.pause();film.pause();music.pause()}else warmNextChapter()}catch{if(mine===token){stop();phase='paused';render();setError('پخش شروع نشد؛ برای تلاش دوباره روی «ادامهٔ پخش» بزن.')}}
+ try{await Promise.all([voice.play(),film.play(),music.play()]);if(mine!==token){voice.pause();film.pause();music.pause()}else setTimeout(()=>{if(mine===token&&phase==='playing')warmNextChapter()},2200)}catch{if(mine===token){stop();phase='paused';render();setError('پخش شروع نشد؛ برای تلاش دوباره روی «ادامهٔ پخش» بزن.')}}
 }
 async function resumeChapter(){
  const mine=++token;setError();phase='playing';render();film.playbackRate=voice.playbackRate=music.playbackRate=rate;seek(film,voice.currentTime,mine);seek(music,chapterOffset()+voice.currentTime,mine);
@@ -108,3 +115,4 @@ function normalize(s){return s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.inde
 async function submitForm(e){e.preventDefault();if(busy||!consent)return;const name=$('#name').value.trim(),mobile=normalize($('#mobile').value);if(name.length<2||!/^09\d{9}$/.test(mobile)){setError('نام و شماره موبایل را بررسی کن.');return}busy=true;setError();const submit=$('#submit'),back=$('#back'),guide=$('#guide');submit.disabled=true;submit.textContent='در حال ثبت…';back.disabled=guide.disabled=true;stop();const payload=JSON.stringify({name,mobile,consent:true});if(payload!==requestPayload){requestId=crypto.randomUUID();requestPayload=payload}const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
  try{const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:requestId,name,mobile,consent:true,website:$('#website').value}),signal:controller.signal});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'ثبت انجام نشد.');reference=String(data.reference||requestId.slice(0,8));phase='success';render()}catch(err){setError(err.name==='AbortError'?'ارتباط طول کشید؛ دوباره تلاش کن.':err.message||'ارتباط برقرار نشد؛ دوباره تلاش کن.');submit.disabled=!consent;submit.textContent='ثبت درخواست مشاوره';back.disabled=guide.disabled=false}finally{clearTimeout(timeout);busy=false}}
 setMedia();progress(0);render();
+if('requestIdleCallback'in window)requestIdleCallback(primeFirstChapter,{timeout:900});else setTimeout(primeFirstChapter,350);
