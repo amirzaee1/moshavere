@@ -76,11 +76,14 @@ function toggleGuide(){
  playGuide(voice.ended||!voice.currentSrc.includes('voice-v4c-7.mp3'));
 }
 voice.addEventListener('timeupdate',()=>{
- const t=voice.currentTime;if(phase==='form'){const target=62+t;if(!music.paused&&Math.abs(music.currentTime-target)>.55)seek(music,target);return}if(phase!=='playing')return;progress(t);if(!film.paused&&Math.abs(film.currentTime-t)>.4)seek(film,t);const target=chapterOffset()+t;if(!music.paused&&Math.abs(music.currentTime-target)>.55)seek(music,target);
+ const t=voice.currentTime;if(phase==='form'){const target=62+t;if(!music.paused&&Math.abs(music.currentTime-target)>.55)seek(music,target);return}if(phase!=='playing')return;
+ const expected=Number.isFinite(voice.duration)?voice.duration:durations[chapter];if(t>=Math.max(0,expected-.14)){finishVoice();return}
+ progress(t);if(!film.paused&&Math.abs(film.currentTime-t)>.4)seek(film,t);const target=chapterOffset()+t;if(!music.paused&&Math.abs(music.currentTime-target)>.55)seek(music,target);
  show($('#clock'),chapter===0&&t<1.65);show($('#message'),chapter===0&&t>=1.15&&t<7.1);
  if(chapter===0&&t<7){show(motion,false);return}const beat=Math.min(2,Math.floor(Math.min(t,durations[chapter])/durations[chapter]*3)),c=cues[chapter][beat];motion.className=`type-direction type-${chapter+1} beat-${beat}`;motion.querySelector('span').textContent=c[0];motion.querySelector('b').textContent=c[1];motion.querySelector('em').textContent=c[2];show(motion,true);
 });
-voice.addEventListener('ended',()=>{film.pause();music.pause();show(motion,false);show($('#clock'),false);show($('#message'),false);if(phase==='playing'){progress(durations[chapter]);phase=chapter===5?'cta':'question';render()}else if(phase==='form'){const button=$('#guide');if(button)button.textContent='پخش دوبارهٔ راهنمای فرم'}});
+function finishVoice(){film.pause();music.pause();show(motion,false);show($('#clock'),false);show($('#message'),false);if(phase==='playing'){progress(durations[chapter]);phase=chapter===5?'cta':'question';render()}else if(phase==='form'){const button=$('#guide');if(button)button.textContent='پخش دوبارهٔ راهنمای فرم'}}
+voice.addEventListener('ended',finishVoice);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)return;if(phase==='playing'){stop();phase='paused';render()}else if(phase==='form'&&!voice.paused){token++;voice.pause();music.pause();const button=$('#guide');if(button)button.textContent='ادامهٔ راهنمای فرم'}});
 function normalize(s){return s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g,'').replace(/^0098/,'0').replace(/^98/,'0')}
 async function submitForm(e){e.preventDefault();if(busy||!consent)return;const name=$('#name').value.trim(),mobile=normalize($('#mobile').value);if(name.length<2||!/^09\d{9}$/.test(mobile)){setError('نام و شماره موبایل را بررسی کن.');return}busy=true;setError();const submit=$('#submit'),back=$('#back'),guide=$('#guide');submit.disabled=true;submit.textContent='در حال ثبت…';back.disabled=guide.disabled=true;stop();const payload=JSON.stringify({name,mobile,consent:true});if(payload!==requestPayload){requestId=crypto.randomUUID();requestPayload=payload}const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
