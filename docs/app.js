@@ -4,12 +4,12 @@ const rate=1.05;
 const durations=[14.7,13.5,10.466667,13.5,11.733333,15.30775];
 const total=durations.reduce((a,b)=>a+b,0);
 const posters=['night-phone.webp','home.webp','cafe-woman.webp','shop.webp','bathroom-woman.webp','window-woman.webp'];
-const titles=['یک پیام، یک اعتماد','واقعیتِ همین روزها','یک تکه از قصه کم است','اسمش اقتصاد مشارکتی است','محصول، فقط یک سرنخ است','قرار نیست زندگی‌ات را عوض کنی'];
+const titles=['پیشنهاد از تو؛ خرید از دوستت','درآمد اضافه، کنار کار و زندگی','یک تکه از قصه کم است','اسمش اقتصاد مشارکتی است','محصول، فقط یک سرنخ است','قرار نیست زندگی‌ات را عوض کنی'];
 const eyebrows=['۰۱ / پیام ۱۱:۴۷','۰۲ / یک راه دوم','۰۳ / سهم گمشده','۰۴ / کشف ماجرا','۰۵ / سرنخ روزمره','۰۶ / انتخاب با توست'];
-const descriptions=['گاهی یک پیام ساده، بیشتر از چیزی که فکر می‌کنی معنا دارد.','نه تغییر ناگهانی؛ فقط امکان یک انتخاب بیشتر.','اعتماد تو، بخشی از ارزش واقعی این زنجیره است.','', 'راز اصلی، محصول نیست؛ اعتماد قبل از انتخاب است.','مسیر باید با زندگی فعلی تو هماهنگ شود، نه برعکس.'];
+const descriptions=['ساعت ۱۱:۴۷ شبه؛ دوستت پیام داده. محصولی رو که پیشنهاد کردی خریده و از خریدش راضیه.','این روزها خیلی‌هامون به یه درآمد اضافه فکر می‌کنیم؛ چیزی که بشه کنار کار و زندگی فعلی‌مون بررسی‌اش کرد.','اعتماد تو، بخشی از ارزش واقعی این زنجیره است.','', 'راز اصلی، محصول نیست؛ اعتماد قبل از انتخاب است.','مسیر باید با زندگی فعلی تو هماهنگ شود، نه برعکس.'];
 const cues=[
- [['یک پیام','یک اعتماد','چند بار؟'],['اعتماد','تبدیل به انتخاب','بی‌آنکه ببینی'],['حالا سؤال اینه','اثرِ حرف تو','کجا می‌ره؟']],
- [['زندگی ادامه دارد','یک راه دوم','نه تغییر ناگهانی'],['برای همین روزها','انتخاب بیشتر','کنار زندگی فعلی'],['آرام و واقعی','امکان تازه','بدون وعده']],
+ [['پیشنهاد تو','خریدِ دوستت','یک تجربهٔ آشنا'],['به پیشنهاد تو','اعتماد کرده','و خرید کرده'],['دوستت از خریدش راضیه','پیشنهاد تو اثر داشت','چند بار برات پیش اومده؟']],
+ [['به درآمد اضافه فکر می‌کنی؟','کنار کار و زندگی','از همین‌جا شروع کنیم'],['اول، شرایطش رو بشناس','بعد بررسی کن','به وقت و شرایطت می‌خوره؟'],['بدون تصمیم عجولانه','انتخاب با توست','درآمدی تضمین نمی‌شه']],
  [['تو فروشنده نبودی','اما اثر گذاشتی','روی یک انتخاب'],['تجربه منتقل شد','اعتماد شکل گرفت','انتخاب انجام شد'],['همه‌چیز بود','جز یک چیز','سهم تو؟']],
  [['ارزش از کجا می‌آید؟','از اعتماد','بین آدم‌ها'],['تجربه · اعتماد','انتخاب','مشارکت'],['اگر فروش واجد شرایط شد','سهم طبق توافق','نه درآمد تضمینی']],
  [['سرنخ جلوی چشمته','محصول','اما راز این نیست'],['سؤال واقعی','تو چی استفاده می‌کنی؟','قبل از انتخاب'],['پشت هر پیشنهاد','یک اعتماد','بین دو آدم']],
@@ -50,10 +50,10 @@ function panelStory(paused=false){return `<div class="story panel"><span class="
 function render(){
  document.querySelector('.experience').dataset.phase=phase;
  document.querySelector('.visual').className=`visual chapter-visual-${chapter+1}`;
- if(phase==='intro')stage.innerHTML='<div class="intro panel"><span class="eyebrow">پیام ساعت ۱۱:۴۷</span><h1>یک پیام.<br>یک سؤال.<br><em>یک مسیر تازه.</em></h1><p>این یک تبلیغ معمولی نیست؛ یک گفت‌وگوی کوتاه دربارهٔ اثری است که شاید همین حالا روی انتخاب آدم‌ها داری.</p><button class="primary" id="start">برای شروع کلیک کن <span>▶</span></button><small>هیچ صدایی پیش از کلیک تو پخش نمی‌شود.</small></div>';
+ if(phase==='intro')stage.innerHTML='<div class="intro panel"><span class="eyebrow">پیام ساعت ۱۱:۴۷</span><h1>یک پیام.<br>یک سؤال.<br><em>یک مسیر تازه.</em></h1><p>یه محصول رو به دوستت پیشنهاد کردی. چند روز بعد، آخر شب، ازش یه پیام می‌گیری…</p><button class="primary" id="start">برای شروع کلیک کن <span>▶</span></button><small>هیچ صدایی پیش از کلیک تو پخش نمی‌شود.</small></div>';
  else if(phase==='playing')stage.innerHTML=panelStory();
  else if(phase==='paused')stage.innerHTML=panelStory(true);
- else if(phase==='question')stage.innerHTML='<div class="panel decision"><span class="eyebrow">یک تجربهٔ آشنا</span><h1>چند بار این اتفاق<br>برات افتاده؟</h1><div class="choices"><button class="primary" id="many-times">بارها</button><button class="secondary" id="not-yet">برام پیش نیومده</button></div></div>';
+ else if(phase==='question')stage.innerHTML='<div class="panel decision"><span class="eyebrow">یک تجربهٔ آشنا</span><h1>چند بار این اتفاق<br>برات افتاده؟</h1><p>کسی با پیشنهاد تو خرید کنه و بعد، از انتخابش راضی باشه.</p><div class="choices"><button class="primary" id="many-times">بارها</button><button class="secondary" id="not-yet">برام پیش نیومده</button></div></div>';
  else if(phase==='cta')stage.innerHTML='<div class="panel decision"><span class="eyebrow">تصمیم با توست</span><h1>می‌خواهی ببینی<br><em>سهم تو کجاست؟</em></h1><p>موضوع دقیق، شرایط همکاری و نحوهٔ محاسبهٔ سهم را بشنو؛ بعد خودت تصمیم بگیر.</p><button class="primary pulse" id="consult">آره؛ نیاز به مشاوره دارم</button><small>راهنمای نام و شماره فقط بعد از همین کلیک پخش می‌شود.</small></div>';
  else if(phase==='form')stage.innerHTML=`<form class="panel form" id="lead-form"><button type="button" class="back" id="back">بازگشت</button><span class="eyebrow">یک قدم تا گفت‌وگو</span><h1>اسمت و شمارهٔ موبایلت را بنویس.</h1><button type="button" class="back guide" id="guide">پخش / ادامهٔ راهنمای فرم</button><p>برای توضیح موضوع، شرایط همکاری و نحوهٔ محاسبهٔ سهم با تو تماس گرفته می‌شود.</p><label for="name">نام و نام خانوادگی</label><input id="name" name="name" required minlength="2" maxlength="80" autocomplete="name" placeholder="نام تو"><label for="mobile">شماره موبایل</label><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" maxlength="18" required placeholder="0912 345 6789"><div class="trap"><input id="website" tabindex="-1" autocomplete="off"></div><label class="consent"><input id="consent" type="checkbox" ${consent?'checked':''}><span>موافقم از نام و شماره‌ام فقط برای تماس دربارهٔ این درخواست استفاده شود.</span></label><button class="primary" id="submit" ${consent?'':'disabled'}>ثبت درخواست مشاوره</button><small>ثبت درخواست، تعهد به خرید یا همکاری نیست.</small></form>`;
  else stage.innerHTML=`<div class="panel decision"><div class="success-mark">✓</div><h1>درخواستت ثبت شد.</h1><p>شماره‌ات فقط برای پیگیری همین گفت‌وگو ذخیره شد.</p><span class="reference">کد پیگیری: <b dir="ltr">${esc(reference||requestId.slice(0,8))}</b></span></div>`;
@@ -108,8 +108,8 @@ function updateTimeline(){
  if(time>total-20)primeGuide();
  const t=time-offsets[chapter];
  show($('#clock'),chapter===0&&t<1.65);
- show($('#message'),chapter===0&&t>=1.15&&t<7.1);
- if(chapter===0&&t<7){show(motion,false);return}
+ show($('#message'),chapter===0&&t>=1.15&&t<9.2);
+ if(chapter===0&&t<9.2){show(motion,false);return}
  const beat=Math.min(2,Math.floor(t/durations[chapter]*3)),key=chapter+':'+beat;
  if(key!==lastCue){
   const c=cues[chapter][beat];lastCue=key;
