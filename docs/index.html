@@ -3,33 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111719">
-  <meta name="description" content="قبل از اینکه بخری، نیازت را بشناس. یک تجربهٔ کوتاه و تعاملی برای درخواست مشاوره.">
-  <title>قبل از اینکه بخری | مشاوره پیش از خرید</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#153b42">
+  <meta name="description" content="یک آشنایی کوتاه و تعاملی با اقتصاد مشارکتی و درخواست مشاوره.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://sahm-hamdeli.amirzaee123.chatgpt.site; media-src 'self' https://sahm-hamdeli.amirzaee123.chatgpt.site; connect-src 'self' https://sahm-hamdeli.amirzaee123.chatgpt.site; form-action 'self'; upgrade-insecure-requests">
+  <title>سهم تو کجاست؟ | همدلی</title>
   <link rel="preload" href="fonts/Vazirmatn-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/q1-hold.jpg" as="image">
-  <link rel="preload" href="assets/q2-hold.jpg" as="image">
-  <link rel="preload" href="assets/cta-hold.jpg" as="image">
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js?v=20261004-voice-after-click" defer></script>
+  <link rel="stylesheet" href="styles.css?v=16">
+  <script src="app.js?v=16" defer></script>
 </head>
 <body>
   <main class="experience">
-    <section class="stage" aria-label="تجربهٔ تعاملی مشاوره پیش از خرید">
-      <video id="film" src="assets/film.mp4" poster="assets/s01-before-you-buy.png" playsinline preload="auto" aria-label="فیلم فارسی مشاوره پیش از خرید"></video>
-      <img id="hold" class="hold hidden" alt="">
-      <div id="intro" class="intro">
-        <div class="brand"><i></i> پیش از خرید</div>
-        <div class="intro-content"><span class="eyebrow">یک تجربهٔ کوتاه، قبل از خرید</span><h1>همه می‌گفتن<br><em>عالیه.</em><br>برای تو چی؟</h1><p>بیا از چیزی شروع کنیم<br>که تو لازم داری.</p><button id="start" class="primary" type="button">برای شروع کلیک کن</button><small>دو سؤال کوتاه · انتخاب با تو</small></div>
+    <audio id="voice" preload="none"></audio>
+    <audio id="music" preload="none"></audio>
+    <div class="visual" aria-hidden="true">
+      <div class="video-layer">
+        <video id="film" class="cinema" muted playsinline preload="none"></video>
+        <div id="clock" class="clock-card hidden"><span>ساعت</span><b>۱۱:۴۷</b></div>
+        <div id="message" class="message-card hidden"><span class="message-dot"></span>همونی که گفتی رو گرفتم…<br><b>عالی بود.</b></div>
+        <div id="motion-type" class="type-direction hidden"><span></span><b></b><em></em><i></i></div>
       </div>
-      <div id="controls" class="controls hidden"><button id="mute" type="button" aria-label="بی‌صدا کردن">♫</button><button id="pause" type="button" aria-label="توقف پخش">Ⅱ</button><button id="speed" type="button" aria-label="سرعت پخش">۱٫۰۵×</button><button id="caption-toggle" type="button" aria-pressed="false">متن</button></div>
-      <div id="caption" class="caption hidden" aria-live="polite"></div>
-      <div id="question" class="question hidden" aria-live="polite"><div id="choices" class="choices"></div><button id="continue" class="continue" type="button" disabled>برای ادامه کلیک کن</button></div>
-      <div id="ending" class="ending hidden"><button id="consult" type="button" aria-label="نیاز به مشاوره دارم">نیاز به مشاوره دارم</button><button id="restart" type="button">از اول ببینم</button></div>
-      <div id="form-panel" class="form-panel hidden" role="dialog" aria-modal="true" aria-label="درخواست مشاوره"><div class="form-top"><span class="eyebrow">مشاوره پیش از خرید</span><button id="close-form" type="button" aria-label="بستن فرم">×</button></div><div id="form-body"><h2>از همین‌جا<br><em>شروع کنیم.</em></h2><p>نام و شماره‌ات را برای درخواست مشاوره بنویس.</p><form id="lead-form"><label>نام<input id="name" name="name" required minlength="2" maxlength="80" autocomplete="name" placeholder="نام شما"></label><label>شماره موبایل<input id="phone" name="phone" required maxlength="20" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="۰۹۱۲ ۱۲۳ ۴۵۶۷"></label><label class="trap" aria-hidden="true">وب‌سایت<input id="website" tabindex="-1" autocomplete="off"></label><label class="consent"><input id="consent" type="checkbox" required><span>اجازه می‌دهم برای همین مشاوره با من تماس بگیرید.</span></label><p id="error" role="alert" class="error hidden"></p><button id="submit" class="primary" type="submit">ثبت درخواست مشاوره</button><small>اطلاعاتت فقط برای همین درخواست ثبت می‌شود.</small></form></div><div id="success" class="success hidden" role="status"><span class="success-mark">✓</span><h2>درخواستت<br><em>ثبت شد.</em></h2><p>نام و شماره‌ات همراه ترجیحاتت ثبت شد. ثبت درخواست به معنی تعیین زمان مشاوره نیست.</p><button id="done" class="primary" type="button">بازگشت به شروع</button></div></div>
-    </section>
-    <aside class="desktop-note"><span>قبل از اینکه بخری</span><p>اول نیاز تو.<br>بعد انتخاب تو.</p><small>مشاوره پیش از خرید</small></aside>
+      <div class="shade"></div><div class="light"></div><div class="grain"></div>
+    </div>
+    <header><span class="brand">همدلی<span>یک پیام، یک سؤال، یک مسیر تازه</span></span><span class="duration">۶ بخش · با انتخاب تو</span></header>
+    <div class="chapter-line" aria-hidden="true"><i id="progress"></i></div>
+    <noscript><div class="error" role="alert">برای اجرای این تجربه، جاوااسکریپت مرورگر را فعال کن.</div></noscript>
+    <section id="stage" class="stage" aria-label="تجربه تعاملی همدلی" aria-live="polite" aria-atomic="true"></section>
+    <div id="error" class="error hidden" role="alert"></div>
+    <footer><small>ویدئوهای نمایشی با هوش مصنوعی تولید شده‌اند.</small></footer>
   </main>
 </body>
 </html>
