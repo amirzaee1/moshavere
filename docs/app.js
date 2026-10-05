@@ -9,19 +9,22 @@ const eyebrows=['۰۱ / پیام ۱۱:۴۷','۰۲ / یک راه دوم','۰۳ / 
 const descriptions=['ساعت ۱۱:۴۷ شبه؛ دوستت پیام داده. محصولی رو که پیشنهاد کردی خریده و از خریدش راضیه.','این روزها خیلی‌هامون به یه درآمد اضافه فکر می‌کنیم؛ چیزی که بشه کنار کار و زندگی فعلی‌مون بررسی‌اش کرد.','اعتماد تو، بخشی از ارزش واقعی این زنجیره است.','', 'راز اصلی، محصول نیست؛ اعتماد قبل از انتخاب است.','مسیر باید با زندگی فعلی تو هماهنگ شود، نه برعکس.'];
 const cues=[
  [['پیشنهاد تو','خریدِ دوستت','یک تجربهٔ آشنا'],['به پیشنهاد تو','اعتماد کرده','و خرید کرده'],['دوستت از خریدش راضیه','پیشنهاد تو اثر داشت','چند بار برات پیش اومده؟']],
- [['به درآمد اضافه فکر می‌کنی؟','کنار کار و زندگی','از همین‌جا شروع کنیم'],['اول، شرایطش رو بشناس','بعد بررسی کن','به وقت و شرایطت می‌خوره؟'],['بدون تصمیم عجولانه','انتخاب با توست','درآمدی تضمین نمی‌شه']],
- [['تو فروشنده نبودی','اما اثر گذاشتی','روی یک انتخاب'],['تجربه منتقل شد','اعتماد شکل گرفت','انتخاب انجام شد'],['همه‌چیز بود','جز یک چیز','سهم تو؟']],
+ [['خیلی‌هامون بهش فکر می‌کنیم','درآمد اضافه','کنار کار و زندگی'],['برگردیم به پیام دوستت','پیشنهاد تو','توی خریدش نقش داشت']],
+ [['تو فروشنده نبودی','اما…',''],['روی یک','انتخاب','اثر گذاشتی'],['همه‌چیز سر جاش بود','جز یک چیز…',''],['وقتی پیشنهادت اثر دارد','سهم تو؟','این‌جای قصه را ببین']],
  [['ارزش از کجا می‌آید؟','از اعتماد','بین آدم‌ها'],['تجربه · اعتماد','انتخاب','مشارکت'],['اگر فروش واجد شرایط شد','سهم طبق توافق','نه درآمد تضمینی']],
  [['سرنخ جلوی چشمته','محصول','اما راز این نیست'],['سؤال واقعی','تو چی استفاده می‌کنی؟','قبل از انتخاب'],['پشت هر پیشنهاد','یک اعتماد','بین دو آدم']],
  [['همان شغل','همان زندگی','بدون تصمیم عجولانه'],['فقط یک بررسی','این مسیر','به تو می‌خورد؟'],['وقتی حرفت اثر می‌گذارد','بدان','سهم تو کجاست']]
 ];
+const cueTimes=[null,[0,6.8],[0,2.93,5.36,8.94],null,null,null];
 
 const $=s=>document.querySelector(s),stage=$('#stage'),voice=$('#voice'),film=$('#film'),motion=$('#motion-type');
-const FILM=MEDIA+'hamdeli-continuous-v21.mp4',GUIDE=MEDIA+'hamdeli-guide-v18.m4a';
+const FILM=MEDIA+'hamdeli-continuous-v23.mp4',GUIDE=MEDIA+'hamdeli-guide-v18.m4a';
 const offsets=durations.map((_,i)=>durations.slice(0,i).reduce((a,b)=>a+b,0));
 let phase='intro',chapter=0,token=0,consent=false,busy=false,requestId='',requestPayload='',reference='';
 let lastCue='',stallTimer=0,clickAt=0,resumeAt=0;
 let answered=false,questionTimer=0;
+let frameHandle=null;
+const reducedMotion=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function chapterAt(time){let next=0;for(let i=1;i<offsets.length;i++)if(time>=offsets[i])next=i;return next}
 function checkQuestion(){
  clearTimeout(questionTimer);questionTimer=0;
@@ -70,7 +73,7 @@ function bind(){
  $('#consent')?.addEventListener('change',e=>{consent=e.target.checked;$('#submit').disabled=!consent});
  $('#lead-form')?.addEventListener('submit',submitForm);
 }
-function stop(){token++;clearTimeout(questionTimer);questionTimer=0;film.pause();voice.pause();clearStall();hideType()}
+function stop(){token++;clearTimeout(questionTimer);questionTimer=0;if(frameHandle!==null&&film.cancelVideoFrameCallback)film.cancelVideoFrameCallback(frameHandle);frameHandle=null;film.pause();voice.pause();clearStall();hideType()}
 function recoverFilm(text){
  if(phase!=='playing')return;
  resumeAt=film.currentTime;stop();phase='paused';render();setError(text);
@@ -98,25 +101,37 @@ function toggleGuide(){
  if(!voice.paused&&!voice.ended){token++;voice.pause();clearStall();$('#guide').textContent='ادامهٔ راهنمای فرم';return}
  playGuide(voice.ended);
 }
-function updateTimeline(){
+function updateTimeline(fromFrame=false){
  if(phase!=='playing')return;
- if(checkQuestion())return;
+ if((fromFrame!==true||(!answered&&film.currentTime>=offsets[1]))&&checkQuestion())return;
  const time=film.currentTime;
  const next=chapterAt(time);
  if(next!==chapter){chapter=next;lastCue='';render()}
  progress(time);
  if(time>total-20)primeGuide();
  const t=time-offsets[chapter];
- show($('#clock'),chapter===0&&t<1.65);
- show($('#message'),chapter===0&&t>=1.15&&t<9.2);
+ show($('#clock'),chapter===0&&t<3.1);
+ show($('#message'),chapter===0&&t>=3.15&&t<9.2);
  if(chapter===0&&t<9.2){show(motion,false);return}
- const beat=Math.min(2,Math.floor(t/durations[chapter]*3)),key=chapter+':'+beat;
+ const starts=cueTimes[chapter]||cues[chapter].map((_,i)=>durations[chapter]*i/cues[chapter].length);
+ let beat=0;for(let i=1;i<starts.length;i++)if(t>=starts[i])beat=i;
+ const key=chapter+':'+beat;
  if(key!==lastCue){
   const c=cues[chapter][beat];lastCue=key;
   motion.className='type-direction type-'+(chapter+1)+' beat-'+beat;
   motion.querySelector('span').textContent=c[0];motion.querySelector('b').textContent=c[1];motion.querySelector('em').textContent=c[2];
  }
+ const age=Math.max(0,t-starts[beat]);
+ const reveal=reducedMotion?1:Math.min(1,age/.48);
+ motion.style.opacity=String(Math.min(1,.18+reveal*1.3));
+ motion.style.transform=`translate3d(0,${Math.pow(1-reveal,3)*14}px,0)`;
  show(motion,true);
+}
+function frameTick(){
+ frameHandle=null;
+ if(phase!=='playing'||film.paused)return;
+ updateTimeline(true);
+ if(phase==='playing'&&film.requestVideoFrameCallback)frameHandle=film.requestVideoFrameCallback(frameTick);
 }
 function handleWaiting(media,expectedPhase){
  if(phase!==expectedPhase||media.paused||media.readyState>=3||stallTimer)return;
@@ -138,6 +153,7 @@ film.addEventListener('playing',()=>{
  clearStall();
  if(clickAt){film.dataset.startLatencyMs=String(Math.round(performance.now()-clickAt));clickAt=0}
  updateTimeline();
+ if(frameHandle===null&&film.requestVideoFrameCallback)frameHandle=film.requestVideoFrameCallback(frameTick);
 });
 film.addEventListener('waiting',()=>handleWaiting(film,'playing'));
 film.addEventListener('stalled',()=>handleWaiting(film,'playing'));

@@ -36,4 +36,29 @@ h1{letter-spacing:0}
 .stage{contain:layout style}
 .message-card{width:min(370px,88%);min-width:0;font-size:1rem;line-height:1.8}
 .message-sender{display:block;font-size:.76rem;font-weight:800;color:#416663;margin-bottom:7px}
+/* Quiet champagne accents, warm Persian copy and a single reading target. */
+:root{--gold:#edc999;--fg:#fff9ee}
+.story h1{line-height:1.52;font-size:clamp(1.85rem,3.4vw,3.4rem);text-wrap:balance;max-width:14ch}
+.story p{max-width:38ch;color:#e9eee9}
+.eyebrow{color:#e4c69c;font-size:.82rem}
+.type-direction{animation:none;text-align:right!important;border:0;left:6%!important;right:auto!important;top:auto!important;bottom:10%!important;max-width:84%;width:max-content;padding:17px 23px 18px;border-radius:3px;background:linear-gradient(270deg,#102d33ef,#102d33bd 70%,#102d3300);text-shadow:0 2px 12px #071c2370;transform:none}
+.type-direction span{font-size:clamp(.95rem,1.5vw,1.15rem);font-weight:500;line-height:1.9;color:#fff8ed}
+.type-direction b{font-size:clamp(2.45rem,4.9vw,4.8rem);line-height:1.4;font-weight:800;color:#f4d7ad;-webkit-text-stroke:0;letter-spacing:0;border:0;padding:0;white-space:normal;text-wrap:balance}
+.type-direction em{font-size:clamp(.94rem,1.5vw,1.16rem);line-height:1.8;color:#fff5e4;margin-top:0}
+.type-direction em:empty{display:none}
+.type-direction i{height:1px;width:76px;margin:12px 0 0 auto;background:linear-gradient(90deg,transparent,#efd4ad)}
+.type-3.beat-1 b{font-size:clamp(3.8rem,7.8vw,7rem);line-height:1.35;color:#ffe7bd}
+.type-3.beat-3 b{color:#ffe7bd}
+.message-card{border-radius:20px 20px 5px 20px;box-shadow:0 16px 38px #081c2340;border:1px solid #fff9}
+.primary{background:linear-gradient(135deg,#f9e7cd,#e3bd88);box-shadow:0 6px 20px #071c2325,0 0 0 1px #fff7 inset}
+@media(max-width:700px){
+ .story h1{max-width:none;font-size:clamp(1.22rem,5.2vw,1.48rem);line-height:1.55}
+ .story p{font-size:.91rem;line-height:1.8}
+ .type-direction{left:20px!important;right:auto!important;bottom:25%!important;width:max-content;max-width:calc(100% - 40px)!important;padding:12px 17px 14px;border-radius:3px;background:linear-gradient(270deg,#102d33ed,#102d33b8 78%,#102d3330)}
+ .type-direction span{font-size:.94rem;line-height:1.75;letter-spacing:0}
+ .type-direction b{font-size:clamp(2rem,8.6vw,2.8rem);line-height:1.4}
+ .type-direction em{font-size:.94rem;line-height:1.75}
+ .type-3.beat-1 b{font-size:clamp(3.25rem,14vw,4.6rem);line-height:1.35}
+ .type-direction i{width:65px;margin-top:8px}
+}
 @media(max-width:700px){.message-card{width:calc(100% - 32px);max-width:350px;left:16px;top:29%;font-size:.94rem;padding:12px 16px 12px 34px}.message-sender{font-size:.73rem}.experience[data-phase="question"] .decision h1{font-size:clamp(1.55rem,6.6vw,2rem)}.experience[data-phase="question"] .decision p{font-size:.92rem;line-height:1.7}.experience[data-phase="question"] .choices{margin-top:16px;gap:10px}}
