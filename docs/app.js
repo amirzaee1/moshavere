@@ -1,5 +1,10 @@
 const MEDIA='https://sahm-hamdeli.amirzaee123.chatgpt.site/media/';
 const API='https://sahm-hamdeli.amirzaee123.chatgpt.site/api/requests';
+// NEXA first: the answer reaches «پاسخ‌های لینک‌ها» of the member whose NEXA code is in ?ref=.
+// While NEXA's switch is off (404), unreachable (network/timeout) or down (5xx), the form falls back to API above.
+const NEXA_API='https://nexa-net.app/external-leads/moshavere';
+const NEXA_REF=/^NEXA-\d{4}(?:-\d{2}){5}-[2-9A-HJ-NP-Z]{8}$/i;
+const CHOICES={'#many-times':'بارها','#not-yet':'برام پیش نیومده'};
 const rate=1.05;
 const durations=[14.7,13.5,10.466667,13.5,11.733333,15.30775];
 const total=durations.reduce((a,b)=>a+b,0);
@@ -22,7 +27,7 @@ const FILM=MEDIA+'hamdeli-continuous-v23.mp4',GUIDE=MEDIA+'hamdeli-guide-v18.m4a
 const offsets=durations.map((_,i)=>durations.slice(0,i).reduce((a,b)=>a+b,0));
 let phase='intro',chapter=0,token=0,consent=false,busy=false,requestId='',requestPayload='',reference='';
 let lastCue='',stallTimer=0,clickAt=0,resumeAt=0;
-let answered=false,questionTimer=0;
+let answered=false,choice='',questionTimer=0;
 let frameHandle=null;
 const reducedMotion=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function chapterAt(time){let next=0;for(let i=1;i<offsets.length;i++)if(time>=offsets[i])next=i;return next}
@@ -66,7 +71,7 @@ function render(){
 function bind(){
  $('#start')?.addEventListener('click',()=>{if(phase!=='intro')return;clickAt=performance.now();playFilm()});
  $('#resume')?.addEventListener('click',()=>playFilm());
- for(const id of ['#many-times','#not-yet'])$(id)?.addEventListener('click',()=>{if(phase!=='question')return;answered=true;clickAt=performance.now();playFilm()});
+ for(const id of ['#many-times','#not-yet'])$(id)?.addEventListener('click',()=>{if(phase!=='question')return;answered=true;choice=CHOICES[id];clickAt=performance.now();playFilm()});
  $('#consult')?.addEventListener('click',()=>{if(phase!=='cta')return;phase='form';render();clickAt=performance.now();playGuide(true)});
  $('#guide')?.addEventListener('click',toggleGuide);
  $('#back')?.addEventListener('click',()=>{if(busy)return;stop();phase='cta';render()});
@@ -185,7 +190,25 @@ function makeRequestId(){
  return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
 }
 function normalize(s){return s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g,'').replace(/^0098/,'0').replace(/^98/,'0')}
-async function submitForm(e){e.preventDefault();if(busy||!consent)return;const name=$('#name').value.trim(),mobile=normalize($('#mobile').value);if(name.length<2||!/^09\d{9}$/.test(mobile)){setError('نام و شماره موبایل را بررسی کن.');return}busy=true;setError();const submit=$('#submit'),back=$('#back'),guide=$('#guide');submit.disabled=true;submit.textContent='در حال ثبت…';back.disabled=guide.disabled=true;stop();const payload=JSON.stringify({name,mobile,consent:true});if(payload!==requestPayload){requestId=makeRequestId();requestPayload=payload}const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
- try{const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:requestId,name,mobile,consent:true,website:$('#website').value}),signal:controller.signal});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'ثبت انجام نشد.');reference=String(data.reference||requestId.slice(0,8));phase='success';render()}catch(err){setError(err.name==='AbortError'?'ارتباط طول کشید؛ دوباره تلاش کن.':err.message||'ارتباط برقرار نشد؛ دوباره تلاش کن.');submit.disabled=!consent;submit.textContent='ثبت درخواست مشاوره';back.disabled=guide.disabled=false}finally{clearTimeout(timeout);busy=false}}
+// the member's NEXA code from this page's own ?ref= (anything else is ignored)
+function nexaRef(){try{const r=(new URLSearchParams(location.search).get('ref')||'').trim();return NEXA_REF.test(r)?r:''}catch(e){return ''}}
+// {ok,reference} · {fallback:true} when NEXA is off/unreachable/down · {error} = a Persian message (no fallback)
+async function sendNexa(body){const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+ try{const res=await fetch(NEXA_API,{method:'POST',mode:'cors',credentials:'omit',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal});
+  if(res.status===404||res.status>=500)return{fallback:true};
+  const data=await res.json().catch(()=>({}));
+  if(res.ok)return data.ok?{ok:true,reference:String(data.reference||'')}:{fallback:true};
+  if(data.error==='consent_required')return{error:'برای ثبت، تیک موافقت را بزن.'};
+  if(res.status===400||res.status===422)return{error:'نام و شماره موبایل را بررسی کن.'};
+  if(res.status===429)return{error:'چند بار پشت‌سرهم تلاش شد؛ چند دقیقهٔ دیگر دوباره امتحان کن.'};
+  if(res.status===409)return{error:'این درخواست همین حالا در حال ثبت است؛ چند لحظهٔ دیگر دوباره امتحان کن.'};
+  return{error:'ثبت انجام نشد؛ دوباره تلاش کن.'}}
+ catch(err){return{fallback:true}}finally{clearTimeout(timeout)}}
+async function submitForm(e){e.preventDefault();if(busy||!consent)return;const name=$('#name').value.trim(),mobile=normalize($('#mobile').value);if(name.length<2||!/^09\d{9}$/.test(mobile)){setError('نام و شماره موبایل را بررسی کن.');return}busy=true;setError();const submit=$('#submit'),back=$('#back'),guide=$('#guide');submit.disabled=true;submit.textContent='در حال ثبت…';back.disabled=guide.disabled=true;stop();const summaries=choice?[{title:'چند بار این اتفاق برات افتاده؟',priority:choice}]:[];const payload=JSON.stringify({name,mobile,consent:true,summaries});if(payload!==requestPayload){requestId=makeRequestId();requestPayload=payload}let timeout=0;
+ try{const ref=nexaRef(),nexa=await sendNexa({...(ref?{referralCode:ref}:{}),id:requestId,name,mobile,consent:true,website:$('#website').value,summaries});if(nexa.error)throw new Error(nexa.error);
+  if(nexa.ok)reference=nexa.reference||requestId.slice(0,8);
+  else{const controller=new AbortController();timeout=setTimeout(()=>controller.abort(),15000);
+  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:requestId,name,mobile,consent:true,website:$('#website').value}),signal:controller.signal});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'ثبت انجام نشد.');reference=String(data.reference||requestId.slice(0,8))}
+  phase='success';render()}catch(err){setError(err.name==='AbortError'?'ارتباط طول کشید؛ دوباره تلاش کن.':err instanceof TypeError?'ارتباط برقرار نشد؛ دوباره تلاش کن.':err.message||'ارتباط برقرار نشد؛ دوباره تلاش کن.');submit.disabled=!consent;submit.textContent='ثبت درخواست مشاوره';back.disabled=guide.disabled=false}finally{clearTimeout(timeout);busy=false}}
 
 film.poster=MEDIA+posters[0];progress();render();primeFilm();
